@@ -1,0 +1,2 @@
+ninja
+mamba-ssm[causal-conv1d]

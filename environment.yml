@@ -1,0 +1,27 @@
+name: cnvqg
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - ffmpeg
+  - libsndfile
+  - pip:
+      - numpy
+      - scipy
+      - pandas
+      - matplotlib
+      - tqdm
+      - pyyaml
+      - soundfile
+      - librosa
+      - einops
+      - rich
+      - tensorboard
+      - torchmetrics
+      - pesq
+      - pystoi
+      - mir_eval
+      - psutil
+      - packaging
+      - scikit-learn
