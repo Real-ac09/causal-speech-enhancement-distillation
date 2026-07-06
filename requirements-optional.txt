@@ -1,7 +1,37 @@
-# Optional acceleration packages.
-# mamba-ssm is not installed by default because it needs a CUDA toolkit
-# that matches the PyTorch CUDA build.
+# Optional Mamba/SSM support.
 #
-# Try only after CUDA/PyTorch versions are aligned:
-# ninja
-# mamba-ssm[causal-conv1d]
+# Working setup used for this project:
+# - Python 3.11
+# - torch==2.11.0+cu128
+# - torchaudio==2.11.0+cu128
+# - CUDA toolkit 12.8
+# - GCC/G++ 13 inside Conda
+#
+# Important:
+# Do not run:
+#   pip install mamba-ssm[causal-conv1d]
+#
+# That can replace the PyTorch CUDA stack.
+#
+# Safer install:
+#   pip install ninja packaging einops
+#   MAX_JOBS=8 pip install "causal-conv1d==1.6.2.post1" --no-build-isolation --no-deps
+#   MAX_JOBS=8 pip install "mamba-ssm==2.3.2.post1" --no-build-isolation --no-deps
+#   pip install huggingface-hub safetensors tokenizers regex transformers
+#   pip install "apache-tvm-ffi==0.1.9" --no-deps
+#   pip install "tilelang==0.1.8" --no-deps
+#   pip install "quack-kernels==0.6.1" --no-deps
+
+ninja
+packaging
+einops
+causal-conv1d==1.6.2.post1
+mamba-ssm==2.3.2.post1
+huggingface-hub
+safetensors
+tokenizers
+regex
+transformers
+apache-tvm-ffi==0.1.9
+tilelang==0.1.8
+quack-kernels==0.6.1
