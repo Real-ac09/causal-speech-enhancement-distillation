@@ -1,2 +1,7 @@
-ninja
-mamba-ssm[causal-conv1d]
+# Optional acceleration packages.
+# mamba-ssm is not installed by default because it needs a CUDA toolkit
+# that matches the PyTorch CUDA build.
+#
+# Try only after CUDA/PyTorch versions are aligned:
+# ninja
+# mamba-ssm[causal-conv1d]
