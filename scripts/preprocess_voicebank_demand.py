@@ -44,9 +44,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
+import numpy as np
+import soundfile as sf
 import torch
-import torchaudio
-from torchaudio.transforms import Resample
+import librosa
 from tqdm import tqdm
 
 
@@ -226,34 +227,38 @@ def split_train_val_by_speaker(
 
 
 def load_resample_mono(path: Path, sample_rate: int) -> Tuple[torch.Tensor, int]:
-    waveform, original_sr = torchaudio.load(path)
+    audio, original_sr = sf.read(path, dtype="float32", always_2d=True)
 
-    if waveform.ndim != 2:
-        raise ValueError(f"Expected waveform shape [channels, samples], got {waveform.shape}")
-
-    if waveform.shape[0] > 1:
-        waveform = waveform.mean(dim=0, keepdim=True)
+    # soundfile gives [samples, channels], convert to mono
+    if audio.shape[1] > 1:
+        audio = audio.mean(axis=1)
+    else:
+        audio = audio[:, 0]
 
     if original_sr != sample_rate:
-        resampler = Resample(orig_freq=original_sr, new_freq=sample_rate)
-        waveform = resampler(waveform)
+        audio = librosa.resample(
+            audio,
+            orig_sr=original_sr,
+            target_sr=sample_rate,
+        )
 
-    waveform = waveform.clamp(-1.0, 1.0)
+    audio = np.clip(audio, -1.0, 1.0)
+    waveform = torch.from_numpy(audio).float().unsqueeze(0)
 
     return waveform, sample_rate
-
 
 def save_wav(path: Path, waveform: torch.Tensor, sample_rate: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    torchaudio.save(
-        str(path),
-        waveform,
-        sample_rate,
-        encoding="PCM_S",
-        bits_per_sample=16,
-    )
+    audio = waveform.squeeze(0).detach().cpu().numpy()
+    audio = np.clip(audio, -1.0, 1.0)
 
+    sf.write(
+        file=str(path),
+        data=audio,
+        samplerate=sample_rate,
+        subtype="PCM_16",
+    )
 
 def relative_to_project(path: Path) -> str:
     try:
@@ -283,13 +288,13 @@ def process_split(
             noisy_waveform, sr = load_resample_mono(pair.noisy_path, sample_rate)
             save_wav(noisy_out, noisy_waveform, sr)
         else:
-            noisy_waveform, sr = torchaudio.load(noisy_out)
+            noisy_waveform, sr = load_resample_mono(noisy_out, sample_rate)
 
         if overwrite or not clean_out.exists():
             clean_waveform, sr = load_resample_mono(pair.clean_path, sample_rate)
             save_wav(clean_out, clean_waveform, sr)
         else:
-            clean_waveform, sr = torchaudio.load(clean_out)
+            clean_waveform, sr = load_resample_mono(clean_out, sample_rate)
 
         num_samples = min(noisy_waveform.shape[-1], clean_waveform.shape[-1])
         duration = num_samples / sample_rate

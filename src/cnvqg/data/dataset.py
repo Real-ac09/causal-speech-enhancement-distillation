@@ -4,13 +4,13 @@ import random
 from pathlib import Path
 from typing import Dict, Optional
 
+import numpy as np
 import pandas as pd
+import soundfile as sf
 import torch
 import torch.nn.functional as F
-import torchaudio
+import librosa
 from torch.utils.data import Dataset
-from torchaudio.transforms import Resample
-
 
 class PairedSpeechDataset(Dataset):
     """
@@ -118,19 +118,24 @@ class PairedSpeechDataset(Dataset):
         if not path.exists():
             raise FileNotFoundError(f"Audio file not found: {path}")
 
-        waveform, sr = torchaudio.load(path)
+        audio, sr = sf.read(path, dtype="float32", always_2d=True)
 
-        if waveform.ndim != 2:
-            raise ValueError(f"Expected waveform shape [channels, samples], got {waveform.shape}")
-
-        if waveform.shape[0] > 1:
-            waveform = waveform.mean(dim=0, keepdim=True)
+        # soundfile gives [samples, channels], convert to mono
+        if audio.shape[1] > 1:
+            audio = audio.mean(axis=1)
+        else:
+            audio = audio[:, 0]
 
         if sr != self.sample_rate:
-            resampler = Resample(orig_freq=sr, new_freq=self.sample_rate)
-            waveform = resampler(waveform)
+            audio = librosa.resample(
+                audio,
+                orig_sr=sr,
+                target_sr=self.sample_rate,
+            )
 
-        return waveform.float()
+        audio = np.clip(audio, -1.0, 1.0)
+
+        return torch.from_numpy(audio).float().unsqueeze(0)
 
     @staticmethod
     def _align_lengths(
