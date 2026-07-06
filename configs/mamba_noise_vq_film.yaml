@@ -1,0 +1,63 @@
+project:
+  name: cn-vqg-speech-enhancement
+  model_name: CN-VQG
+  seed: 42
+
+audio:
+  sample_rate: 16000
+  n_fft: 512
+  hop_length: 160
+  win_length: 400
+  chunk_seconds: 4.0
+  mono: true
+
+data:
+  dataset_name: voicebank_demand
+  raw_dir: data/raw
+  processed_dir: data/processed
+  train_split: train
+  val_split: val
+  test_split: test
+
+model:
+  encoder_channels: 64
+  latent_dim: 128
+  noise_latent_dim: 64
+  codebook_size: 256
+  num_quantizers: 2
+  mamba_hidden_dim: 128
+  decoder_channels: 64
+  causal: true
+
+training:
+  batch_size: 8
+  epochs: 100
+  learning_rate: 0.0002
+  weight_decay: 0.00001
+  num_workers: 4
+  mixed_precision: true
+
+loss:
+  si_sdr_weight: 1.0
+  stft_weight: 1.0
+  vq_commitment_weight: 0.25
+  noise_consistency_weight: 0.1
+
+evaluation:
+  metrics:
+    - pesq
+    - stoi
+    - estoi
+    - si_sdr
+    - csig
+    - cbak
+    - covl
+    - rtf
+    - latency_ms
+    - memory_mb
+    - parameter_count
+
+paths:
+  checkpoints_dir: checkpoints
+  results_dir: results
+  experiments_dir: experiments

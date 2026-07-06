@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data
+data/raw/
+data/processed/
+data/interim/
+data/external/
+
+# Model outputs
+checkpoints/
+results/
+experiments/
+
+# Audio/temp files
+*.wav
+*.flac
+*.mp3
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# System/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
+wandb/
+runs/
