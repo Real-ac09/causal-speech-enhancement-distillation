@@ -10,18 +10,32 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data
-data/raw/
-data/processed/
-data/interim/
-data/external/
+# Data files - ignore dataset contents but keep folder structure
+data/raw/*
+data/processed/*
+data/interim/*
+data/external/*
+
+!data/raw/.gitkeep
+!data/raw/**/.gitkeep
+!data/processed/.gitkeep
+!data/processed/**/.gitkeep
+!data/interim/.gitkeep
+!data/interim/**/.gitkeep
+!data/external/.gitkeep
+!data/external/**/.gitkeep
 
 # Model outputs
-checkpoints/
-results/
-experiments/
+checkpoints/*
+results/*
+experiments/*
 
-# Audio/temp files
+!checkpoints/.gitkeep
+!results/.gitkeep
+!results/**/.gitkeep
+!experiments/.gitkeep
+
+# Audio/temp/model files
 *.wav
 *.flac
 *.mp3
