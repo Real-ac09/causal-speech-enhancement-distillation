@@ -14,6 +14,15 @@
 # That can replace the PyTorch CUDA stack.
 #
 # Safer install:
+#   conda install -c nvidia cuda-toolkit=12.8 -y
+#   conda install -c conda-forge "gcc_linux-64=13.*" "gxx_linux-64=13.*" -y
+#
+#   export CUDA_HOME="$CONDA_PREFIX"
+#   export PATH="$CUDA_HOME/bin:$PATH"
+#   export LD_LIBRARY_PATH="$CUDA_HOME/lib:$CUDA_HOME/lib64:$LD_LIBRARY_PATH"
+#   export CC="$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-gcc"
+#   export CXX="$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-g++"
+#
 #   pip install ninja packaging einops
 #   MAX_JOBS=8 pip install "causal-conv1d==1.6.2.post1" --no-build-isolation --no-deps
 #   MAX_JOBS=8 pip install "mamba-ssm==2.3.2.post1" --no-build-isolation --no-deps
@@ -21,6 +30,7 @@
 #   pip install "apache-tvm-ffi==0.1.9" --no-deps
 #   pip install "tilelang==0.1.8" --no-deps
 #   pip install "quack-kernels==0.6.1" --no-deps
+#   pip install cloudpickle ml-dtypes "z3-solver>=4.13.0,<4.15.5" torch-c-dlpack-ext --no-deps
 
 ninja
 packaging
@@ -35,3 +45,7 @@ transformers
 apache-tvm-ffi==0.1.9
 tilelang==0.1.8
 quack-kernels==0.6.1
+cloudpickle
+ml-dtypes
+z3-solver
+torch-c-dlpack-ext
