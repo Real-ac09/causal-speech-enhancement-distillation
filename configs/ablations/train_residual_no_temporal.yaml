@@ -20,7 +20,7 @@ model:
   use_residual: true
   use_vq: true
   use_noise_conditioning: true
-  use_temporal: true
+  use_temporal: false
 loss:
   waveform_l1_weight: 1.0
   si_sdr_weight: 0.5
@@ -38,4 +38,4 @@ training:
   max_val_batches: null
 paths:
   checkpoint_dir: checkpoints
-  experiment_name: cnvqg_residual_baseline
+  experiment_name: cnvqg_residual_no_temporal

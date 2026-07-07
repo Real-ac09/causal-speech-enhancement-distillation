@@ -17,7 +17,7 @@ model:
   temporal_hidden_dim: 128
   temporal_layers: 4
   use_mamba: false
-  use_residual: true
+  use_residual: false
   use_vq: true
   use_noise_conditioning: true
   use_temporal: true
@@ -38,4 +38,4 @@ training:
   max_val_batches: null
 paths:
   checkpoint_dir: checkpoints
-  experiment_name: cnvqg_residual_baseline
+  experiment_name: cnvqg_no_residual

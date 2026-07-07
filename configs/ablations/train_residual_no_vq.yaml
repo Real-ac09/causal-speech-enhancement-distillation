@@ -18,7 +18,7 @@ model:
   temporal_layers: 4
   use_mamba: false
   use_residual: true
-  use_vq: true
+  use_vq: false
   use_noise_conditioning: true
   use_temporal: true
 loss:
@@ -38,4 +38,4 @@ training:
   max_val_batches: null
 paths:
   checkpoint_dir: checkpoints
-  experiment_name: cnvqg_residual_baseline
+  experiment_name: cnvqg_residual_no_vq

@@ -19,7 +19,7 @@ model:
   use_mamba: false
   use_residual: true
   use_vq: true
-  use_noise_conditioning: true
+  use_noise_conditioning: false
   use_temporal: true
 loss:
   waveform_l1_weight: 1.0
@@ -38,4 +38,4 @@ training:
   max_val_batches: null
 paths:
   checkpoint_dir: checkpoints
-  experiment_name: cnvqg_residual_baseline
+  experiment_name: cnvqg_residual_no_noise_conditioning
