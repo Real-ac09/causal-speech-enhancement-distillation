@@ -82,6 +82,8 @@ class CNVQGModel(nn.Module):
         use_vq: bool = True,
         use_noise_conditioning: bool = True,
         use_temporal: bool = True,
+        residual_scale_init: float = 0.05,
+        learn_residual_scale: bool = True,
     ) -> None:
         super().__init__()
 
@@ -137,8 +139,12 @@ class CNVQGModel(nn.Module):
         )
 
         # Used only when use_residual=True.
-        # Starts small so the initial model stays close to the noisy input.
-        self.residual_scale = nn.Parameter(torch.tensor(0.05))
+        # For standard residual training this can be learnable.
+        # For Mamba ablations, fixing it prevents collapse to exact identity.
+        if learn_residual_scale:
+            self.residual_scale = nn.Parameter(torch.tensor(float(residual_scale_init)))
+        else:
+            self.register_buffer("residual_scale", torch.tensor(float(residual_scale_init)))
 
     def _make_no_vq_output(self, noise_latent: torch.Tensor) -> VQOutput:
         batch_size, _, latent_frames = noise_latent.shape

@@ -53,7 +53,6 @@ class CausalConvBlock(nn.Module):
         x = self.in_projection(x)
         x = self.activation(x)
 
-        # Left padding only = causal convolution.
         x = F.pad(x, (self.kernel_size - 1, 0))
         x = self.depthwise(x)
         x = self.activation(x)
@@ -63,11 +62,60 @@ class CausalConvBlock(nn.Module):
         return x + residual
 
 
+class MambaResidualBlock(nn.Module):
+    """
+    Stabilised Mamba residual block.
+
+    Uses:
+    - LayerNorm before Mamba
+    - small learnable layer scale
+    - residual connection
+
+    Input/output:
+        [B, C, T] -> [B, C, T]
+    """
+
+    def __init__(
+        self,
+        channels: int,
+        d_state: int = 16,
+        d_conv: int = 4,
+        expand: int = 2,
+        layer_scale_init: float = 0.1,
+    ) -> None:
+        super().__init__()
+
+        from mamba_ssm import Mamba
+
+        self.norm = nn.LayerNorm(channels)
+
+        self.mamba = Mamba(
+            d_model=channels,
+            d_state=d_state,
+            d_conv=d_conv,
+            expand=expand,
+        )
+
+        self.layer_scale = nn.Parameter(torch.full((channels,), layer_scale_init))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # [B, C, T] -> [B, T, C]
+        x_t = x.transpose(1, 2)
+
+        y = self.norm(x_t)
+        y = self.mamba(y)
+        y = y * self.layer_scale
+
+        x_t = x_t + y
+
+        return x_t.transpose(1, 2)
+
+
 class TemporalBlock(nn.Module):
     """
     Temporal modelling block.
 
-    If use_mamba=True, this tries to use mamba_ssm.Mamba.
+    If use_mamba=True, this tries to use stabilised Mamba residual blocks.
     If Mamba is unavailable, it safely falls back to causal Conv1D blocks.
     """
 
@@ -88,26 +136,39 @@ class TemporalBlock(nn.Module):
         self.requested_mamba = use_mamba
         self.uses_mamba = False
 
-        layers: list[nn.Module] = []
-
         if use_mamba:
             try:
-                from mamba_ssm import Mamba
-
-                layers = [
-                    Mamba(
-                        d_model=channels,
-                        d_state=16,
-                        d_conv=4,
-                        expand=2,
-                    )
-                    for _ in range(num_layers)
-                ]
+                self.layers = nn.ModuleList(
+                    [
+                        MambaResidualBlock(
+                            channels=channels,
+                            d_state=16,
+                            d_conv=4,
+                            expand=2,
+                            layer_scale_init=0.1,
+                        )
+                        for _ in range(num_layers)
+                    ]
+                )
 
                 self.uses_mamba = True
 
             except Exception:
-                layers = [
+                self.layers = nn.ModuleList(
+                    [
+                        CausalConvBlock(
+                            channels=channels,
+                            hidden_dim=hidden_dim,
+                            kernel_size=kernel_size,
+                        )
+                        for _ in range(num_layers)
+                    ]
+                )
+
+                self.uses_mamba = False
+        else:
+            self.layers = nn.ModuleList(
+                [
                     CausalConvBlock(
                         channels=channels,
                         hidden_dim=hidden_dim,
@@ -115,34 +176,13 @@ class TemporalBlock(nn.Module):
                     )
                     for _ in range(num_layers)
                 ]
-
-                self.uses_mamba = False
-        else:
-            layers = [
-                CausalConvBlock(
-                    channels=channels,
-                    hidden_dim=hidden_dim,
-                    kernel_size=kernel_size,
-                )
-                for _ in range(num_layers)
-            ]
+            )
 
             self.uses_mamba = False
-
-        self.layers = nn.ModuleList(layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if x.ndim != 3:
             raise ValueError(f"Expected x shape [B, C, T], got {x.shape}")
-
-        if self.uses_mamba:
-            # Mamba expects [B, T, C].
-            x = x.transpose(1, 2)
-
-            for layer in self.layers:
-                x = x + layer(x)
-
-            return x.transpose(1, 2)
 
         for layer in self.layers:
             x = layer(x)
