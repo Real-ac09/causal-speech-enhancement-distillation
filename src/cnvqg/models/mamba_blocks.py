@@ -153,19 +153,14 @@ class TemporalBlock(nn.Module):
 
                 self.uses_mamba = True
 
-            except Exception:
-                self.layers = nn.ModuleList(
-                    [
-                        CausalConvBlock(
-                            channels=channels,
-                            hidden_dim=hidden_dim,
-                            kernel_size=kernel_size,
-                        )
-                        for _ in range(num_layers)
-                    ]
-                )
-
-                self.uses_mamba = False
+            except Exception as exc:
+                raise RuntimeError(
+                    "use_mamba=True was requested, but Mamba could not be initialised. "
+                    "This would silently change the experiment into a causal-conv model. "
+                    "Check that mamba-ssm is installed and that LD_LIBRARY_PATH includes "
+                    "$CONDA_PREFIX/lib and $CONDA_PREFIX/lib64. "
+                    f"Original error: {exc}"
+                ) from exc
         else:
             self.layers = nn.ModuleList(
                 [
