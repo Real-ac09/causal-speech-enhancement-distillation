@@ -1,0 +1,110 @@
+protocol_id: v13_final_hybrid_2026-07-25
+status: frozen
+frozen_at: '2026-07-25'
+research_label: CN-VQG-GRU-T1
+claim:
+  scope: lightweight causal real-time speech enhancement
+  selection_statement: >-
+    The projected GRU candidate is PESQ-non-inferior to the Mamba control at
+    the predeclared 0.05 margin on the untouched internal reserve and passes
+    the one-thread p95 hop deadline.
+  exclusions:
+    - quality superiority over the Mamba control
+    - project-wide pristine use of the VoiceBank+DEMAND standard test set
+    - generalisation to unseen corpora before external-holdout evaluation
+model:
+  implementation: predictive_noise_vq_mamba_v8
+  architecture_alias_in_checkpoint: causal_temporal_core_v12
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  algorithmic_latency_ms: 20.0
+  parameter_count: 808095
+  components:
+    local_tf_encoder_decoder: causal_time_kernel_one_convolutions
+    noise_adaptation: four_frame_rolling_continuous_state
+    temporal_memory: projected_gru
+    temporal_hidden_dim: 232
+    reconstruction: direct_scalar_mask
+    synthesis: causal_overlap_add
+  disabled:
+    auxiliary_vq: false
+    mamba: false
+    global_frequency_attention: false
+    scale_decoder_adapter: false
+    phase_correction: false
+    asymmetric_magnitude_loss: false
+selection_evidence:
+  reserve_aggregate:
+    path: results/v12/reserve/aggregate_three_seed/comparison.json
+    sha256: 80e30a0f549366593948ccc3f933bb89013cabfb01ba6cdd6858e6061def693f
+    files_per_seed: 437
+    seeds: 3
+    pesq_delta: -0.030042583482307306
+    hierarchical_ci95:
+      - -0.043816337689564125
+      - -0.015742282206824876
+    noninferiority_margin: 0.05
+    noninferiority_passed: true
+  structural_runtime:
+    path: results/runtime/v12_structural_latency_7800x3d.json
+    sha256: 82e9c260607e583c5efca7b9e14831faabe5d84061f23c79706effc86d0352b7
+    p95_ms: 3.5767215
+    hop_deadline_ms: 10.0
+    persistent_state_mib_fp32: 0.118988037109375
+checkpoints:
+  - seed: 1200
+    config: configs/v12/generated/full/gru_matched_time1_seed1200.yaml
+    config_sha256: da4481505c9aa0a035e8ca47e0a39fdd7a15186b9331d845bf571c15ce643ef7
+    path: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+    sha256: 5216893ac37a2ee0d3fb5b122a071433bf50bdd8917b28d2ee95db62bb385c97
+  - seed: 1201
+    config: configs/v12/generated/full/gru_matched_time1_seed1201.yaml
+    config_sha256: a4ebdb6388f4a47a27dbbbbebd018b4f54c841f9acc1747ed9ef0aa73708134b
+    path: checkpoints/v12/full/gru_matched_time1_seed1201/best.pt
+    sha256: 7c2cb1e5d0dac71c5a80a78e9c00c9f4b83e8ed2df050e29e8ca5253ac94370b
+  - seed: 1202
+    config: configs/v12/generated/full/gru_matched_time1_seed1202.yaml
+    config_sha256: e250646edcd789b526348461795a789782788ff680a48f92057c3acfe5dc8a1f
+    path: checkpoints/v12/full/gru_matched_time1_seed1202/best.pt
+    sha256: 34f3456bc7a1f7a111b75ce2e1a836eafd5c86eaded7ce95b34b8ceba009665e
+standard_test:
+  metadata: data/processed/voicebank_demand/metadata/test.csv
+  metadata_sha256: 33454f6151a30bbae211a74c54c118f48413ee02a396943d0ed8754c08bff679
+  items: 824
+  historical_project_use: true
+  policy: >-
+    Use only after this protocol is frozen. Treat it as the standard
+    VoiceBank+DEMAND comparability benchmark, not as a project-wide pristine
+    holdout. Do not change the architecture or checkpoint policy in response
+    to its results.
+evaluation:
+  checkpoint_policy: evaluate_all_three_preselected_best_checkpoints
+  primary_metrics:
+    - enhanced_pesq
+    - enhanced_si_sdr
+    - si_sdr_improvement
+    - enhanced_stoi
+    - enhanced_estoi
+  uncertainty: hierarchical_seed_and_file_bootstrap_95ci
+  bootstrap_samples: 20000
+  bootstrap_seed: 13000
+  runtime_checkpoint_seed: 1200
+  runtime_threads: 1
+  runtime_warmup_seconds: 1.0
+  runtime_measurement_seconds: 30.0
+  runtime_gate:
+    p95_below_hop_deadline: true
+    p99_below_hop_deadline: true
+  post_test_policy: no_architecture_or_checkpoint_reselection
+source_files:
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8
+  src/cnvqg/models/v8_native_streaming.py: 5a27698ce02b7076632d5bd59422c72db358d426fe4c71f21db745c91026d139
+  src/cnvqg/models/factory.py: 0fa117cba1401ba402aa73ea6dd71fa25fad4edb4433381ab493d70ed881fe54
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/aggregate_final_model_seeds.py: 747a146ba57b357e86bf80eff74aa9eed945010604780f69f345d0e9677443df
+  src/cnvqg/metrics/speech_metrics.py: 5ecd6e6a3de3796adeb509a63d3597f0c90509a1cc246f59ee4cc5caefbc4eee
+  scripts/measure_latency.py: a82b0a5cab998f47e00345f388efe5fec9527a69f7fe9be7ad2075c5090bf9da

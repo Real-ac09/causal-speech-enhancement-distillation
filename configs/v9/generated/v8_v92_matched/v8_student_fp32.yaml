@@ -1,0 +1,101 @@
+data:
+  batch_size: 1
+  chunk_seconds: 4.0
+  num_workers: 0
+  sample_rate: 16000
+  train_metadata: data/processed/voicebank_demand/metadata/v89_overfit_1.csv
+  train_random_crop: false
+  val_metadata: data/processed/voicebank_demand/metadata/v89_overfit_1.csv
+loss:
+  complex_stft_complex_weight: 1.0
+  complex_stft_compression_power: 0.3
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_weight: 0.0
+  complex_stft_win_lengths:
+  - 320
+  compute_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  magnitude_equal_loudness: false
+  magnitude_log_weight: 0.0
+  magnitude_ratio_cap: 1.0
+  magnitude_ratio_charbonnier_eps: 0.001
+  magnitude_ratio_loss: l1
+  magnitude_ratio_weight: 1.0
+  magnitude_weight: 0.0
+  mel_weight: 0.0
+  noise_prediction_hop_length: 160
+  noise_prediction_n_fft: 512
+  noise_prediction_weight: 0.0
+  noise_prediction_win_length: 320
+  noise_spectrum_weight: 0.0
+  phase_confidence_weight: 0.0
+  phase_weight: 0.0
+  si_sdr_weight: 0.0
+  stft_weight: 0.0
+  tf_detail_center: false
+  tf_detail_hop_length: 160
+  tf_detail_magnitude_power: 0.3
+  tf_detail_n_fft: 512
+  tf_detail_win_length: 320
+  vq_weight: 0.0
+  waveform_charbonnier_eps: 0.001
+  waveform_l1_weight: 0.0
+model:
+  architecture: predictive_noise_vq_mamba_v8
+  auxiliary_vq: false
+  codebook_size: 32
+  hop_length: 160
+  magnitude_power: 0.3
+  mamba_d_conv: 4
+  mamba_d_state: 16
+  mamba_expand: 2
+  n_fft: 512
+  phase_residual_scale: 0.0
+  prediction_horizons:
+  - 1
+  - 2
+  - 4
+  prototype_prediction_weight: 0.02
+  reconstruction_mode: direct_scalar_mask
+  sample_rate: 16000
+  scale_preserving_detail: false
+  use_mamba: true
+  variant: student
+  vq_commitment_weight: 0.02
+  vq_usage_weight: 0.005
+  win_length: 320
+paths:
+  checkpoint_dir: checkpoints/v9_topology
+  experiment_name: v8_student_fp32
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 9401
+training:
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  early_stopping:
+    enabled: false
+  ema:
+    enabled: false
+  epochs: 500
+  grad_clip_norm: 1.0
+  learning_rate: 0.0001
+  log_every: 25
+  lr_scheduler:
+    name: none
+  metricgan_lite:
+    enabled: false
+  optimizer:
+    name: adamw
+  perceptual_validation:
+    enabled: true
+    max_items: 1
+  precision: fp32
+  save_every_epoch: false
+  val_every: 25
+  weight_decay: 1.0e-05

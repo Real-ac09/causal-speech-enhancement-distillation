@@ -1,0 +1,59 @@
+gate_id: v15_cross_domain_intelligibility_preservation_2026-07-25
+status: frozen_before_cross_domain_baseline_evaluation
+frozen_at: '2026-07-25'
+purpose: >-
+  Prevent a PESQ-only V15 promotion by requiring cross-domain intelligibility
+  recovery while preserving V14.2 quality, distortion, real-time, and model-size
+  performance.
+selection_policy:
+  dns1_external_test_may_drive_selection: false
+  dns_training_cross_domain_dev_may_drive_selection: true
+  voicebank_standard_test_may_drive_selection: false
+  maximum_seed1200_candidate_recipes: 4
+  candidate_checkpoint_rule: fixed_epoch_3
+cross_domain_dev:
+  reference: v14_2_seed1200
+  candidate_minus_reference:
+    pesq:
+      minimum_mean: -0.01
+      rationale: practical non-inferiority
+    si_sdr_db:
+      minimum_mean: -0.05
+      rationale: practical non-inferiority
+    stoi:
+      minimum_mean: 0.005
+      ci95_lower_must_exceed: 0.0
+      rationale: primary intelligibility recovery endpoint
+    estoi:
+      minimum_mean: 0.0
+      rationale: no extended-intelligibility tradeoff
+  candidate_minus_noisy:
+    stoi:
+      minimum_mean: 0.0
+      maximum_harm_rate: 0.40
+    quietest_clean_level_stoi:
+      minimum_mean: -0.005
+      maximum_harm_rate: 0.50
+voicebank_development:
+  reference: v14_2_seed1200
+  candidate_minus_reference:
+    pesq:
+      minimum_mean: -0.01
+    si_sdr_db:
+      minimum_mean: -0.05
+    stoi:
+      minimum_mean: -0.001
+    estoi:
+      minimum_mean: -0.001
+deployment:
+  maximum_parameters: 850000
+  maximum_algorithmic_latency_ms: 20.0
+  maximum_cpu_rtf: 0.50
+  maximum_cpu_p95_ms: 10.0
+replication:
+  required_training_seeds:
+    - 1200
+    - 1201
+    - 1202
+  required_only_after_all_seed1200_gates_pass: true
+  final_external_holdout_required: true

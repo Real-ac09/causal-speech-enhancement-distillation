@@ -1,0 +1,52 @@
+version: v17_final_benchmark
+status: prepared_not_authorized_until_confirmation_pass
+prepared_at: '2026-07-26'
+purpose: final_dissertation_evidence
+entry_gate:
+  required_decision: advance_confirmed_recipe7b_to_final_benchmarks
+  checkpoint_mutation_after_entry: forbidden
+benchmark_groups:
+  objective_quality:
+    metrics:
+      - pesq
+      - si_sdr
+      - stoi
+      - estoi
+    report:
+      - overall
+      - by_domain
+      - by_noise_condition
+      - by_input_snr
+  real_time:
+    metrics:
+      - parameter_count
+      - model_size_mb
+      - algorithmic_latency_ms
+      - cpu_rtf
+      - gpu_rtf
+      - frame_latency_p50_ms
+      - frame_latency_p95_ms
+      - frame_latency_p99_ms
+      - peak_memory_mb
+      - bounded_stream_state
+  preservation:
+    metrics:
+      - clean_speech_degradation
+      - avoidable_violation_rate
+      - per_metric_violation_rate
+  ablations:
+    required:
+      - recipe5b_without_causal_statistics
+      - recipe6_full_window_supervision
+      - recipe7a_burn_in_only
+      - recipe7b_explicit_prefix_supervision
+comparison_policy:
+  use_existing_frozen_baselines_where_available: true
+  do_not_retrain_failed_recipes: true
+  external_models:
+    claim_only_on_identical_public_test_conditions: true
+estimated_runtime:
+  evaluation_hours: 1-3
+  additional_training_required: false
+decision:
+  complete: freeze_tables_figures_and_dissertation_claims

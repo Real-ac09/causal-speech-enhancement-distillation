@@ -1,0 +1,89 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 8001
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val_v51_search_100.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 3
+  num_workers: 8
+model:
+  architecture: predictive_noise_vq_mamba_v8
+  variant: teacher
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  channels: 320
+  noise_dim: 96
+  temporal_layers: 2
+  auxiliary_vq: false
+  codebook_size: 32
+  prediction_horizons:
+  - 1
+  - 2
+  - 4
+  use_mamba: true
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+loss:
+  waveform_l1_weight: 0.1
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.1
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 1.0
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_win_lengths:
+  - 320
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.0
+  magnitude_weight: 0.5
+  magnitude_equal_loudness: true
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 3
+  learning_rate: 0.0001
+  weight_decay: 1.0e-05
+  gradient_accumulation_steps: 2
+  grad_clip_norm: 5.0
+  precision: bf16
+  log_every: 50
+  val_every: 1
+  checkpoint_metric: loss_total
+  checkpoint_mode: min
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: none
+  early_stopping:
+    enabled: false
+  perceptual_validation:
+    enabled: false
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  max_train_batches: 600
+  save_every_epoch: true
+paths:
+  checkpoint_dir: checkpoints/v8/matched_trial
+  experiment_name: control

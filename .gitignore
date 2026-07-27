@@ -59,3 +59,10 @@ experiments/**
 *.log
 wandb/
 runs/
+
+# Local run control files, scratch backups, and generated archives
+/logs/**
+/data/external/*/
+/results.zip
+*.before_*
+*.bak_*

@@ -1,0 +1,33 @@
+version: v17_recipe7b
+status: draft_pending_prefix_target_audit
+prepared_at: '2026-07-27'
+hypothesis: >-
+  After a one-second burn-in, supervision derived from the actually observed
+  one-second prefix will reduce avoidable violations without degrading PESQ,
+  utility, or intelligibility.
+only_target_change_from_recipe7a:
+  - full_two_second_target_to_explicit_first_one_second_prefix_target
+retained:
+  - recipe7a_epoch4_warm_start
+  - causal_statistics_controller
+  - first_50_percent_recipe5_loss_burn_in
+  - balanced_domain_class_sampler
+  - controller_parameter_count_9699
+  - frozen_candidate_a_backbone
+  - unchanged_full_window_nine_check_evaluation
+training:
+  config: configs/v17/utility_safety_recipe7b_prefix_seed17048.yaml
+  script: scripts/train_v17_recipe7b.py
+  seed: 17048
+  epochs: 8
+  learning_rate: 0.0001
+  expected_runtime_minutes: 4-6
+freeze_requirements:
+  - prefix_acquisition_complete
+  - five_candidates_per_item
+  - no_required_metric_missingness
+  - finite_utility_and_violation_targets
+  - train_and_calibration_class_distribution_reported
+decision:
+  pass: advance_recipe7b_to_confirmation
+  fail: stop_recipe7b_and_report_prefix_supervision_limit

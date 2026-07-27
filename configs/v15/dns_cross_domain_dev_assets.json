@@ -1,0 +1,814 @@
+{
+  "status": "assets_selected_before_download_or_mixing",
+  "source_repository": "https://github.com/microsoft/DNS-Challenge.git",
+  "source_branch": "interspeech2020/master",
+  "source_commit": "70f19285c36cca4df2338f9248775ddc50980c6b",
+  "selection_seed": 15001,
+  "items": 60,
+  "unique_clean_readers": 60,
+  "clean_assets": [
+    {
+      "path": "datasets/clean/book_06002_chp_0034_reader_06731_68.wav",
+      "lfs_oid_sha256": "f5cedfaf751b757365132a36c794697eb779274282507e1e2f3918fe2fd123b8",
+      "lfs_size": 992044,
+      "reader_id": "06731",
+      "score": "0000447307647661ec99b61b18f3655f95d6ef5bf42926bf33aa8b59d4260e69"
+    },
+    {
+      "path": "datasets/clean/book_00622_chp_0009_reader_05331_18.wav",
+      "lfs_oid_sha256": "3fe2b8e8e96ac10587598e5581666d470a0fe80e694b8addf94b0726133ab12e",
+      "lfs_size": 992044,
+      "reader_id": "05331",
+      "score": "00004e63c88a727f5683f35d6e350b8dd0c9757ceba5dc95675d709676c52375"
+    },
+    {
+      "path": "datasets/clean/book_02919_chp_0002_reader_03911_18.wav",
+      "lfs_oid_sha256": "dbf5979359ed42dce4e3814b3a37d97faa6325f0a043607df54f4a4ca16a1645",
+      "lfs_size": 992044,
+      "reader_id": "03911",
+      "score": "0000aafd8a9aca18692e3274706b48c45ec35a938326ce2261f4769daa8faae1"
+    },
+    {
+      "path": "datasets/clean/book_07500_chp_0001_reader_09713_43.wav",
+      "lfs_oid_sha256": "4ab89de15638c369981b41e9d9a70474e2d0592bfe8a120d22842b534bd49915",
+      "lfs_size": 992044,
+      "reader_id": "09713",
+      "score": "0000e2a5ae027067801176ade7a0f58f797a8663a7976e832b819b227735b610"
+    },
+    {
+      "path": "datasets/clean/book_10988_chp_0015_reader_06208_20.wav",
+      "lfs_oid_sha256": "85a5de76200f7c967d27d046ad0a531b8e35c7449f8bbb3b5e1bdec680841333",
+      "lfs_size": 992044,
+      "reader_id": "06208",
+      "score": "0007b2ba68188180d9df68aeb5e5e04514ef9fbb9c44fc69eafa168a1c2745c9"
+    },
+    {
+      "path": "datasets/clean/book_09669_chp_0017_reader_11208_1.wav",
+      "lfs_oid_sha256": "b679b82a428c1d032596bec6df71058a80bf159efaa662697d882a85e60bc6a7",
+      "lfs_size": 992044,
+      "reader_id": "11208",
+      "score": "000844aec48c758b96d7338dfe6e5155d042e7dc583467c74b5d1305f2cee2cf"
+    },
+    {
+      "path": "datasets/clean/book_06909_chp_0010_reader_01355_26.wav",
+      "lfs_oid_sha256": "ed24dd7cf5d3bced5844ff238bbbc4ea32ada0acca1578c58712a120c2e84166",
+      "lfs_size": 992044,
+      "reader_id": "01355",
+      "score": "0008a4a00ab8c71b59ea1abf4f9756b50e1fb8e3b577c3ae36f8e73951699abc"
+    },
+    {
+      "path": "datasets/clean/book_01806_chp_0013_reader_11223_36.wav",
+      "lfs_oid_sha256": "a5f7e27124e97218009f236cd29c603520dd93f015ba2cab852a5535b2b5254c",
+      "lfs_size": 992044,
+      "reader_id": "11223",
+      "score": "0009efbb56d067817e182d51f5317f1eda8b4ed422cc2868b91ea924b9b37f09"
+    },
+    {
+      "path": "datasets/clean/book_04988_chp_0025_reader_02019_6.wav",
+      "lfs_oid_sha256": "69a7a8da561b738fdc767d5655a0df028a9eb6852c843a640c25b30d8b268c26",
+      "lfs_size": 992044,
+      "reader_id": "02019",
+      "score": "000ab00bcf1fc4bc6a1daa4b91db315e2e7ce1dd705acda2d8bf195450851e28"
+    },
+    {
+      "path": "datasets/clean/book_03063_chp_0016_reader_09774_3.wav",
+      "lfs_oid_sha256": "ecd84c3bc4afedc28f02ad2b90bacc444d3f859b72f14dac977b498f3cebbcb5",
+      "lfs_size": 992044,
+      "reader_id": "09774",
+      "score": "000ac3bbf0752d392ed8546bfb008ade164e225c734d1e4ac8b7877e89fe7784"
+    },
+    {
+      "path": "datasets/clean/book_02374_chp_0004_reader_06989_19.wav",
+      "lfs_oid_sha256": "5e3ebe1bf6d59fd5ac4a0b5d601970aafd9c3e517f32be0533a1b7953e2d6764",
+      "lfs_size": 992044,
+      "reader_id": "06989",
+      "score": "000b5ab1d34031bbfe707961d98ef6fab26ce364e09a62732a311d46ea1f6614"
+    },
+    {
+      "path": "datasets/clean/book_03273_chp_0012_reader_03308_19.wav",
+      "lfs_oid_sha256": "e50f68fb4d63eb0bc98413ca1133fc48b88f957e8257adac4aa23e78e427d35c",
+      "lfs_size": 992044,
+      "reader_id": "03308",
+      "score": "000bb7a80fa469b7d61f06f05f60bd51e9e2945aee29530eb770374f28132198"
+    },
+    {
+      "path": "datasets/clean/book_06909_chp_0021_reader_01618_91.wav",
+      "lfs_oid_sha256": "7962b2fd128246a3d14ecad8b11138136adf892c78cdd2958424e78d5904e07b",
+      "lfs_size": 992044,
+      "reader_id": "01618",
+      "score": "000e661d062fcb71d31b0b7e04c7c3e91f39bcb41a835aae859090c1bbe01bf3"
+    },
+    {
+      "path": "datasets/clean/book_02249_chp_0002_reader_00099_7.wav",
+      "lfs_oid_sha256": "9031ec05de5143dd0713b4c271343e229824fa1b2d1877cdeb1668c4bd5b6439",
+      "lfs_size": 992044,
+      "reader_id": "00099",
+      "score": "000f984966a5f6848b879e90af567392cea221dcf09f566edd99e8d9297e709e"
+    },
+    {
+      "path": "datasets/clean/book_10995_chp_0004_reader_01615_37.wav",
+      "lfs_oid_sha256": "2b8fde57528eebf986b6552df281f69805f208e69c3dcd8c85275af872024334",
+      "lfs_size": 992044,
+      "reader_id": "01615",
+      "score": "00103bb68f0874529475742645b9e54588717c6fee82c815bd476f9e40238ebd"
+    },
+    {
+      "path": "datasets/clean/book_06174_chp_0038_reader_07146_12.wav",
+      "lfs_oid_sha256": "a8c6e75e542543adb3c30288a1b40d35319f218e7a3f13b9db5af30eb7d72ba7",
+      "lfs_size": 992044,
+      "reader_id": "07146",
+      "score": "001411cc63df09f4381b003bbc018533c5592c39d6fbab4bd6f93e5652aed518"
+    },
+    {
+      "path": "datasets/clean/book_06571_chp_0009_reader_09436_39.wav",
+      "lfs_oid_sha256": "46859ca530beef1dd40f40948ee51bd27fe031dd433f12851e93fc58b9fb8116",
+      "lfs_size": 992044,
+      "reader_id": "09436",
+      "score": "0014439b050bbb5d33786eb08de502040fa1b48019e5d22c235c91c6bc46fa5a"
+    },
+    {
+      "path": "datasets/clean/book_06664_chp_0061_reader_10618_13.wav",
+      "lfs_oid_sha256": "9d86d992219e6b33ce434875de30f93f0292b5f2b9f32a62add011708b1e01f9",
+      "lfs_size": 992044,
+      "reader_id": "10618",
+      "score": "00147a23ed1b6252a8da5d718b90ad0db7b42bf7b4d98012a91b7b455a57180e"
+    },
+    {
+      "path": "datasets/clean/book_10773_chp_0007_reader_07418_10.wav",
+      "lfs_oid_sha256": "573caf55e79f38b8092f987b290321bc4bf6edcecc2a4319fed00fd0d9ff9272",
+      "lfs_size": 992044,
+      "reader_id": "07418",
+      "score": "0016e7d4d950230835d280cf759924633868bfa8c4388b3b55634dd3b149c38a"
+    },
+    {
+      "path": "datasets/clean/book_10538_chp_0023_reader_09046_95.wav",
+      "lfs_oid_sha256": "103063b4be0478cf69ad37b824d98ee34f51e9817cbb573a9442c1a35360b5e9",
+      "lfs_size": 992044,
+      "reader_id": "09046",
+      "score": "001832c5fbd0436fe2038dbd60b39383dc901d2a46c7d20dbef23808b3533a76"
+    },
+    {
+      "path": "datasets/clean/book_03046_chp_0002_reader_10193_9.wav",
+      "lfs_oid_sha256": "95ff042e0547189dff8e669fdcea7911adc486fc7aa941eeea5b86284365ee74",
+      "lfs_size": 992044,
+      "reader_id": "10193",
+      "score": "001a3e8fb3f4d825b30de31152c59c0c7657a24b6c796a6bf2f5026a2d84976c"
+    },
+    {
+      "path": "datasets/clean/book_01257_chp_0025_reader_02643_9.wav",
+      "lfs_oid_sha256": "8ba8b28e80c2dc3743ad19bd784923e0c0b9aca7b4b6e3bb2366b5c71a3dc84c",
+      "lfs_size": 992044,
+      "reader_id": "02643",
+      "score": "001a681c7c0425960eb7be26083a3955f01c39ae6972915a845619c84658ef3a"
+    },
+    {
+      "path": "datasets/clean/book_07185_chp_0040_reader_02855_33.wav",
+      "lfs_oid_sha256": "155ece3eac0a846fda42f8a486162792a9ad5a03aae34a476bf8e1825a733881",
+      "lfs_size": 992044,
+      "reader_id": "02855",
+      "score": "001b740d86d30184e9cb660b3d143c575221204bda4195e63fe78efca7dfbc57"
+    },
+    {
+      "path": "datasets/clean/book_09123_chp_0023_reader_01147_12.wav",
+      "lfs_oid_sha256": "375b5090aa545623903b636109e83dcfd8fe20eb539ad0d0dec7c62521d43cf3",
+      "lfs_size": 992044,
+      "reader_id": "01147",
+      "score": "001c780ec2fa9c267f1280b13d6496167ad883b6cdef3d092bd7de3facc316b1"
+    },
+    {
+      "path": "datasets/clean/book_10547_chp_0010_reader_09934_58.wav",
+      "lfs_oid_sha256": "d1baa82045a9894b1185f24986954b4f33ee0270de8e7342d13e0f5d93740eea",
+      "lfs_size": 992044,
+      "reader_id": "09934",
+      "score": "001da790fed82fb4d75f27d277f92b13b92be7bf36a9108a7973a80f8f72cf73"
+    },
+    {
+      "path": "datasets/clean/book_07772_chp_0023_reader_06587_18.wav",
+      "lfs_oid_sha256": "2791d0462b99289848db559d7e22f621faf6c1123712073e1b625ef4ce90a25d",
+      "lfs_size": 992044,
+      "reader_id": "06587",
+      "score": "001dd6b87ccfe8469c628ba6fe630c6ee0017d1a07f6dd34c591b30a502aed3e"
+    },
+    {
+      "path": "datasets/clean/book_09987_chp_0027_reader_00576_34.wav",
+      "lfs_oid_sha256": "281e08024dd13d7f9fb034c43746b56b552ac1bc58176a1ea507c92ba933b228",
+      "lfs_size": 992044,
+      "reader_id": "00576",
+      "score": "001e8aa25e2b11879caae6ee627967a86d75a29bb2f6c3263cbf16d5733164be"
+    },
+    {
+      "path": "datasets/clean/book_00028_chp_0015_reader_08897_68.wav",
+      "lfs_oid_sha256": "87003dee14ad9fc51fe4d95895bcac74a9367cde556fe1d0f9e5463ebde99de4",
+      "lfs_size": 992044,
+      "reader_id": "08897",
+      "score": "001f6abd998c0e8b81e2612dd7afee1f5e3db4ea70be3482f05c6e743cbd8ab8"
+    },
+    {
+      "path": "datasets/clean/book_03549_chp_0005_reader_07726_20.wav",
+      "lfs_oid_sha256": "f42f0b04c682e77c5890d2f0d9dc038002c081bf39095bc17b1be31943583915",
+      "lfs_size": 992044,
+      "reader_id": "07726",
+      "score": "00226e95f0d3c2974ce4b3fa8919d9e4ff314d4f618de92ceb128414aadff34b"
+    },
+    {
+      "path": "datasets/clean/book_04759_chp_0002_reader_02859_22.wav",
+      "lfs_oid_sha256": "492e476ee5212bee02df74c79c70f04d43a9fb8238ca427f8a9c290ade391697",
+      "lfs_size": 992044,
+      "reader_id": "02859",
+      "score": "00257a1a36d4203715dd1fc5851a16172585ea58f8046c4d2cdeee4212fb3a8c"
+    },
+    {
+      "path": "datasets/clean/book_03946_chp_0003_reader_09709_26.wav",
+      "lfs_oid_sha256": "2d45db83b89aa7f48d86134186330c6a57635cacb2963f3ecba213c51183812e",
+      "lfs_size": 992044,
+      "reader_id": "09709",
+      "score": "002628a8a63ca74cad673e88acfd9e6b3933e5e9ef5d317f526a9b8506102828"
+    },
+    {
+      "path": "datasets/clean/book_04753_chp_0040_reader_08134_48.wav",
+      "lfs_oid_sha256": "a62bb12cc293b6efd02abe2895e8eb3ed823cbc6dba434857a03bf589c96b127",
+      "lfs_size": 992044,
+      "reader_id": "08134",
+      "score": "0026557cef8cf6f0d21b0ee1f2c6ba3c03cbe53354372d7ee15e81cc88c825c4"
+    },
+    {
+      "path": "datasets/clean/book_10449_chp_0001_reader_00852_28.wav",
+      "lfs_oid_sha256": "fe11dc58e6abd1e383bb434c5d055cb267651478bb04239589bcd1dae63e18d3",
+      "lfs_size": 992044,
+      "reader_id": "00852",
+      "score": "0029422576fefbf53b400ac4c10c2f66011d291a32ea3686dab6d07039c46ce5"
+    },
+    {
+      "path": "datasets/clean/book_10128_chp_0007_reader_04899_16.wav",
+      "lfs_oid_sha256": "94c588921691a7aa1434155bc8c0327aa81b22cfa803edef6552e97d6ae879bb",
+      "lfs_size": 992044,
+      "reader_id": "04899",
+      "score": "00294ed64365d6f8f960eb611bad006824e110662e054da55be12a701e96ee30"
+    },
+    {
+      "path": "datasets/clean/book_03072_chp_0004_reader_01440_23.wav",
+      "lfs_oid_sha256": "efa939033912e5d471ced0c1b3cc68325712c711f05d761b71b418b7e971837f",
+      "lfs_size": 992044,
+      "reader_id": "01440",
+      "score": "002bb7ac4a1528ab00c53d71d748ae94bb752129b1052cc5028e6d75ba2710bf"
+    },
+    {
+      "path": "datasets/clean/book_07689_chp_0002_reader_10196_4.wav",
+      "lfs_oid_sha256": "828a15b28a553e42b9bdecb2174a0606a3974307027625105a9775f34048061a",
+      "lfs_size": 992044,
+      "reader_id": "10196",
+      "score": "002da8fdb38f9e28aa466c3adc7ccc48e61bf30ad534f677b230b5fd88af1ef7"
+    },
+    {
+      "path": "datasets/clean/book_08190_chp_0018_reader_06260_31.wav",
+      "lfs_oid_sha256": "f8250ef2af76d7835ac433cf9532b53c9a81b4178563d1a32302fddf307ef581",
+      "lfs_size": 992044,
+      "reader_id": "06260",
+      "score": "002e341c5b0061b84ce98639629177eed807e7dba7de2dfd6ff09a001436ee13"
+    },
+    {
+      "path": "datasets/clean/book_06046_chp_0035_reader_05734_0.wav",
+      "lfs_oid_sha256": "aa0b25debdd4d4ec9e27261d0eb458a2701fdc067fa0be4e579f67b6e5ebb3fb",
+      "lfs_size": 992044,
+      "reader_id": "05734",
+      "score": "003070ac1f7f19daf5e40899abdd3bd0643e2a57e09849e9c88d8da674589002"
+    },
+    {
+      "path": "datasets/clean/book_04366_chp_0011_reader_05727_127.wav",
+      "lfs_oid_sha256": "cfa25d4bf3364bd04e2a237c8aaa8cc9acce1254e3c503629b9c1cdcf1733e19",
+      "lfs_size": 992044,
+      "reader_id": "05727",
+      "score": "0036d2bf4ab9a64c4e839d3950098e9fe2c0ca23ae02f1851befa4cd046907cd"
+    },
+    {
+      "path": "datasets/clean/book_09158_chp_0004_reader_03198_10.wav",
+      "lfs_oid_sha256": "a6ce949b37056aeb9ae8b83d89acc96e370c37ba877cca89444ed471fe6e1239",
+      "lfs_size": 992044,
+      "reader_id": "03198",
+      "score": "00371163187e3231826a8f040fff5d90ab236c8e6efa9789b529bed694d0d2dd"
+    },
+    {
+      "path": "datasets/clean/book_07390_chp_0008_reader_00671_36.wav",
+      "lfs_oid_sha256": "0c9fdc8e28470cf7ef0ff03df29b5950df0a8dee7277adf2291b46bb8432b3d5",
+      "lfs_size": 992044,
+      "reader_id": "00671",
+      "score": "0039d2c78b65cd220d719bc24006a8d9d6a03728dfd510fab4046c9e47cc05a1"
+    },
+    {
+      "path": "datasets/clean/book_00082_chp_0011_reader_01593_73.wav",
+      "lfs_oid_sha256": "f2a7ab787e961fe88ca53898f36d2e3a00336781e5b1d8c74ba430bf5aabe61b",
+      "lfs_size": 992044,
+      "reader_id": "01593",
+      "score": "003a9de6be74bf1881c112b44b57d9bb2e5892d20c56c21200c26e46a7710d55"
+    },
+    {
+      "path": "datasets/clean/book_07940_chp_0006_reader_11470_24.wav",
+      "lfs_oid_sha256": "6003a1e6dcc8dbd7c12f6b9a360f255607f9fbd8e6a4532242f32519ca4da29d",
+      "lfs_size": 992044,
+      "reader_id": "11470",
+      "score": "003aac9faf06ebd8aa678ee0e330299539da5f2eb81b59365e77bd4ed4bae6f7"
+    },
+    {
+      "path": "datasets/clean/book_09323_chp_0023_reader_05621_11.wav",
+      "lfs_oid_sha256": "e81d3d4aaad4e22da5c6769d366bc96ca170db19e6ba69e73b46f3c390f220c4",
+      "lfs_size": 992044,
+      "reader_id": "05621",
+      "score": "003b0bc9f11097708d25ea305dc3380d83e06fb4fcef35b97d5d9e6cf5adff47"
+    },
+    {
+      "path": "datasets/clean/book_03741_chp_0011_reader_01324_43.wav",
+      "lfs_oid_sha256": "8c50dc95b6efe7bf3d9e70b2c56d0ac922dfda9147c6f349282a2c360a9ba9db",
+      "lfs_size": 992044,
+      "reader_id": "01324",
+      "score": "003b9b6fdab318d84ae2e1413a549961b6973036176b7a419ceb19d960472097"
+    },
+    {
+      "path": "datasets/clean/book_03293_chp_0002_reader_11118_4.wav",
+      "lfs_oid_sha256": "4c0de266f2b39e2c9cc18acada3d97d2cde3fbd09aeed16dbcd5cd82393cd547",
+      "lfs_size": 992044,
+      "reader_id": "11118",
+      "score": "003c8da3296d17a112ede7c9f2173cb331c2669db815fabc2dd830ad1e53c431"
+    },
+    {
+      "path": "datasets/clean/book_06351_chp_0009_reader_11981_49.wav",
+      "lfs_oid_sha256": "cf78cd4aaf97e9b178652f592dfd7ac341b0bcb7280b8e3f2db1111c325cabf5",
+      "lfs_size": 992044,
+      "reader_id": "11981",
+      "score": "003cc7e67bae26eb5237e47e7c4fcf22b13be7cea78b25d7f59e06b64199a7a0"
+    },
+    {
+      "path": "datasets/clean/book_06649_chp_0019_reader_11238_3.wav",
+      "lfs_oid_sha256": "95bba049e9eee826a36ca24c937decaeff947b5535da487f25e10fb10849f531",
+      "lfs_size": 992044,
+      "reader_id": "11238",
+      "score": "003d378ce26f8419e6f0c8c9ccaaf30371e21279316a43dd42726b8a32e22e6c"
+    },
+    {
+      "path": "datasets/clean/book_03607_chp_0030_reader_06524_14.wav",
+      "lfs_oid_sha256": "15fc3c36c053c674d49957ad59815c5279bcc644cb2aefd054c7a2ec4ef5fdd3",
+      "lfs_size": 992044,
+      "reader_id": "06524",
+      "score": "003eb3dec6649d857c979d11c571a7a5538850a2a71c50134dc1cfb23dff2ce4"
+    },
+    {
+      "path": "datasets/clean/book_03392_chp_0012_reader_10174_20.wav",
+      "lfs_oid_sha256": "a0ab3f827c2b4f90235580087fb6dad409125d2ba3b1e696d4ccdd432dff7dee",
+      "lfs_size": 992044,
+      "reader_id": "10174",
+      "score": "003ee8e2cf77176273161be37c6b3e13ec1ea5acd984898d8c94d6893b55d71a"
+    },
+    {
+      "path": "datasets/clean/book_07592_chp_0005_reader_03900_34.wav",
+      "lfs_oid_sha256": "967868de4aef8ae2b8537ed9cdbaf22d555bc5521a77f3efbe34b8932ea08e83",
+      "lfs_size": 992044,
+      "reader_id": "03900",
+      "score": "003fc678d7e06b12ab1d83a93ace51ac55aa619ac4f0b92add15d62fdecd9d8e"
+    },
+    {
+      "path": "datasets/clean/book_06264_chp_0012_reader_05579_5.wav",
+      "lfs_oid_sha256": "0e5c6eeb52ba23ee1bc5a0178ad74e6bc5806c1a2cec2ac677e5a73e14a6654f",
+      "lfs_size": 992044,
+      "reader_id": "05579",
+      "score": "0042b6e7b3397b06178c209711fb682ffbbe793015c66884837c7b56515b5b69"
+    },
+    {
+      "path": "datasets/clean/book_02598_chp_0009_reader_02276_22.wav",
+      "lfs_oid_sha256": "bbf3e8039664d62fb8357fb57613ed4ef1eaff37013b9e0fd96b885ed47d6e37",
+      "lfs_size": 992044,
+      "reader_id": "02276",
+      "score": "0042ececa0937926156a2c2ec77986383128107cb2eb8e2f1d96ff7bcf04a323"
+    },
+    {
+      "path": "datasets/clean/book_11134_chp_0013_reader_10220_42.wav",
+      "lfs_oid_sha256": "2993c40a5086f71b078567fc470b19768841f34a04fe287e182cade353bafbe1",
+      "lfs_size": 992044,
+      "reader_id": "10220",
+      "score": "0043d87bb99a2081ce24586de7746745c6d085d6dcf1cd72a3d2d8bf9a42c9eb"
+    },
+    {
+      "path": "datasets/clean/book_02845_chp_0006_reader_01687_10.wav",
+      "lfs_oid_sha256": "36c36baa16251dc1cd39a034357b5e97e215e1c398a10368c1b3d485815ac191",
+      "lfs_size": 992044,
+      "reader_id": "01687",
+      "score": "004433f565d3446cc9ea7919af3ff3530fa15f2bdc6ca79741a48167932d911b"
+    },
+    {
+      "path": "datasets/clean/book_02676_chp_0008_reader_04421_1.wav",
+      "lfs_oid_sha256": "ed96cc670b4f6665349f5327e0c937a4d4f6df358c0b1022aeb2c106e47d046e",
+      "lfs_size": 992044,
+      "reader_id": "04421",
+      "score": "0044438d1a47031143595327caa40e5e756d37b7181e6e0e92dcfb36fa084e19"
+    },
+    {
+      "path": "datasets/clean/book_01096_chp_0015_reader_09970_18.wav",
+      "lfs_oid_sha256": "99264d19af082e3c56e30c67368fd45281d3b094dacaad5000a5d42f93ecb9a6",
+      "lfs_size": 992044,
+      "reader_id": "09970",
+      "score": "00452fd7d268ce4c4f2959d474c0e20a6f717cb9481810319f2489b5da690f03"
+    },
+    {
+      "path": "datasets/clean/book_04432_chp_0002_reader_10614_64.wav",
+      "lfs_oid_sha256": "02244f7e5528f0539648faff00aaf5b89fc95a12fe69c24044a5810abf883901",
+      "lfs_size": 992044,
+      "reader_id": "10614",
+      "score": "0045e224d8d3b6d0b3f0225d4f530ce227e1ab74250aba78031af08a2d09050e"
+    },
+    {
+      "path": "datasets/clean/book_10410_chp_0007_reader_02437_24.wav",
+      "lfs_oid_sha256": "8ac264510eac56d1652d8061670a66a11e14842150bd84f18889fcb7b627d05c",
+      "lfs_size": 992044,
+      "reader_id": "02437",
+      "score": "0047488ca0b5e87489243bc8e685058e7efc6e6c694db0b84c7f7116ed70d0b5"
+    },
+    {
+      "path": "datasets/clean/book_09423_chp_0020_reader_05319_3.wav",
+      "lfs_oid_sha256": "073cdc6fe71f5c4217eb036597c5e32d884620830ac4e7988d74168b149aa441",
+      "lfs_size": 992044,
+      "reader_id": "05319",
+      "score": "00480daac73f8e38dde94e8ba1c4a8f1d1d6f7949034689d4b2537b671195125"
+    }
+  ],
+  "noise_assets": [
+    {
+      "path": "datasets/noise/door_Freesound_validated_433979_4.wav",
+      "lfs_oid_sha256": "89861fb6dea8a8c86487f86e760cf05850510a151d236031cda1dcb6ae0ab302",
+      "lfs_size": 320044,
+      "score": "00019f2f0ec8f934f49852f8c079c4a9382c5d81aea8334f40d800666e367eca"
+    },
+    {
+      "path": "datasets/noise/6-ibVOZw7eg.wav",
+      "lfs_oid_sha256": "844d76b418813eb2f5c23fef38c4a8f5494cf85a68303018f9f66759fe2cd9c5",
+      "lfs_size": 320078,
+      "score": "0001c56d1cdb5422e11b56117693adb6fc6e73a9e316ab4f4bf5a48c23d6f234"
+    },
+    {
+      "path": "datasets/noise/NpmeNdvvHvM.wav",
+      "lfs_oid_sha256": "818e5a9e76346595bd2a7f759fb3810d4d436800b3ab754a665a92d54684d6bb",
+      "lfs_size": 320078,
+      "score": "0001eb8a4f72d82658376ea6d1976308575de018e2ea418820c7ef7e2e4936d1"
+    },
+    {
+      "path": "datasets/noise/6JHyzNkb_VE.wav",
+      "lfs_oid_sha256": "363987639b52fa5d3dbc40250f0428d8e75d094ee92af80066ad434872bd3ab9",
+      "lfs_size": 320078,
+      "score": "000368e9a697e1f8ea88d5e4a7fea83e6d562c90e14c293ff0e606f1fd22bbf5"
+    },
+    {
+      "path": "datasets/noise/door_Freesound_validated_134969_3.wav",
+      "lfs_oid_sha256": "ee7bea4232762775f8fce9b3e27e4d3948c8ac6a45a87ca769f703d6eed0b448",
+      "lfs_size": 320044,
+      "score": "000440c56ea17556e16a0dc282ce08ce26e52887065b8a1536da660c2a1a3733"
+    },
+    {
+      "path": "datasets/noise/egWTiouOrwA.wav",
+      "lfs_oid_sha256": "6f1198476cd0979e6a584085e85cfe34a0f6031e3cef12163063f894af720c12",
+      "lfs_size": 320078,
+      "score": "00059a105cf8f3304e27463367b0269ab4e2bb2483bed53754851fe75757a638"
+    },
+    {
+      "path": "datasets/noise/jTEIPwrJ4Xw.wav",
+      "lfs_oid_sha256": "5aca02c511097f0e3d76780cd99b0547f426605fe789a503dd2c1dffb78d849a",
+      "lfs_size": 320078,
+      "score": "0007805da9b0d24a4ff74bea6cca018282a379a3a542bba5e892b7f5568721bb"
+    },
+    {
+      "path": "datasets/noise/bl8IiZM0VHg.wav",
+      "lfs_oid_sha256": "df8a27d3a7e385a0901f8e94d23d76bfd4abc24bcebad3b68908981445b610c6",
+      "lfs_size": 320078,
+      "score": "0008867192007ec27bfc6ff8803d6ed688a21b16bc46dc8e3cd242635509851e"
+    },
+    {
+      "path": "datasets/noise/door_Freesound_validated_185907_34.wav",
+      "lfs_oid_sha256": "209edacaf8cac31f44d5e8d84f1aa1f3976d8c6b00c2000e7fdce7139628a97d",
+      "lfs_size": 320044,
+      "score": "00091e9e8b80eb5d9c05821322d4aaf8398a2f68b603b630e158be8000da54ba"
+    },
+    {
+      "path": "datasets/noise/xId-Pbko1QM.wav",
+      "lfs_oid_sha256": "475a4c835a44cc0f1f96a67d8c7c2db550929da3b59e11dd79f738b78f9f23d4",
+      "lfs_size": 320098,
+      "score": "000ab2f13ea963697416ca22362ba28bc316bbaf7c7d46a986e832f8cf054dc8"
+    },
+    {
+      "path": "datasets/noise/door_Freesound_validated_186355_0.wav",
+      "lfs_oid_sha256": "9743c8d0b5603c02edb0fccaf9e261fb64c2a487891517e1b0917d6a08d51243",
+      "lfs_size": 320044,
+      "score": "000b314c99ad978f1f6aa30638e225c4e234b4bb7f7f4ee954cbe7d58ac962e7"
+    },
+    {
+      "path": "datasets/noise/j8b-xMgRI28.wav",
+      "lfs_oid_sha256": "b9cdca223329773ce7afc3637dacfe815c2c49a4d4c7151372ead9b3649fea94",
+      "lfs_size": 320078,
+      "score": "000b5ef34f3b32f70f371f107bb0ee48b2e8b040e8c1a453570c9f33af6a31c6"
+    },
+    {
+      "path": "datasets/noise/gKmMAsPdAms.wav",
+      "lfs_oid_sha256": "cff05bce2a81e4f83505376f2f4a270c3a49e569f8fa8237e5c93a92326a3220",
+      "lfs_size": 314100,
+      "score": "000d0f78b15b2ca92b6c37718749486f36756b135001c40cef235ffc34035c35"
+    },
+    {
+      "path": "datasets/noise/eIIqB_xW3_Q.wav",
+      "lfs_oid_sha256": "a03d8d6f3ed25c2a4dbcfc32f82341ad8fb701109eded60884b6cdddf8d6cea1",
+      "lfs_size": 320078,
+      "score": "000dfbd290a32bb93080863a71d55896342fae4dc6bcd5a07d782c82d0c946d3"
+    },
+    {
+      "path": "datasets/noise/-2o6jgFtzuo.wav",
+      "lfs_oid_sha256": "3b48f4dd128868dc7ce4c32a868ffb8dd6ec2ab6a616ab6f74296de471f8d06a",
+      "lfs_size": 320078,
+      "score": "000e50aeeb9c1b3a6fa9f0b2298fcf0d328a9eb3161abfc4c192812ff7a12d9a"
+    },
+    {
+      "path": "datasets/noise/typing_Freesound_validated_210079_23.wav",
+      "lfs_oid_sha256": "133d86d0d700294806c7ee9ae1aab44aba45d8446c70d5ba6a911850d0009a41",
+      "lfs_size": 320044,
+      "score": "000f1fc53f66c1c3f3cf6496d826b4bde8b2edca7ad85287ed1922ceffaf9cdc"
+    },
+    {
+      "path": "datasets/noise/Vm-BOLJ3OhA.wav",
+      "lfs_oid_sha256": "d4160e81982d5cc981fec9034fc3f154d995f447198140ae96b902fcb503ffd6",
+      "lfs_size": 320078,
+      "score": "000f3186ac09dad42dc35d6e50ab36de7ed5c7e5c5ea43b31d4c35607ba88e63"
+    },
+    {
+      "path": "datasets/noise/ihEBTc2bt6o.wav",
+      "lfs_oid_sha256": "11d8be8778752fee6da279006c9956a09fa477a1aaea4d584482ef2cdb633ea3",
+      "lfs_size": 320078,
+      "score": "0010b60ec063fd307c7326053cadf22add704b46eb57f72f025840d10d373084"
+    },
+    {
+      "path": "datasets/noise/QN9wBSdUT4c.wav",
+      "lfs_oid_sha256": "683bf8948fe581bbdc953d3e0292ad6723a55f5645cf0b3450dfa3d90fe20171",
+      "lfs_size": 320078,
+      "score": "0010e822d7ec6a4d0369059bf4d298676aeb2ba7a02c395c9a51a21c8819cb27"
+    },
+    {
+      "path": "datasets/noise/WbCwBJ52TNE.wav",
+      "lfs_oid_sha256": "00bac646a7c773036eca2c2acc40aaf4297408c47e50bca9bf7ed4367c0175da",
+      "lfs_size": 320078,
+      "score": "00135b249ba3c62de11d3169fa6b84edc83081ec01b8c8dccbb7430a4632818c"
+    },
+    {
+      "path": "datasets/noise/udk44ILdOhs.wav",
+      "lfs_oid_sha256": "7cc838493f38efa45fc74a7cd45a867eee247b664225c98229baf46df145d29f",
+      "lfs_size": 320078,
+      "score": "001929bb2e709638d9556d7ce50f6761568151aa78bd4e1150fe4f41e96df6c5"
+    },
+    {
+      "path": "datasets/noise/breath_spit_Freesound_validated_202073_11.wav",
+      "lfs_oid_sha256": "9e3ff3e54398030294c5a410f53972559ddbe165d129bb2f339e9ed651ee5c5e",
+      "lfs_size": 320044,
+      "score": "00193bf0dbf7f8ac53ca27470ed63552fe1a85325307751d88090787783d9a3a"
+    },
+    {
+      "path": "datasets/noise/3mt11BuP5dw.wav",
+      "lfs_oid_sha256": "4d379521cde7b452250c843a63a2f225b70746e06280b59a364beb91d5392149",
+      "lfs_size": 320078,
+      "score": "00196a8cd38c6c9fd3bd40fe11a595a3935d10570307e7ba0258a62d15b4c3dd"
+    },
+    {
+      "path": "datasets/noise/AaApDRI2C1o.wav",
+      "lfs_oid_sha256": "b888092867017211e15730dd4d666359f9a64129694d79310b16218a6e4184c3",
+      "lfs_size": 320078,
+      "score": "00199931ce3ac3be1e51ec6683f2477c25fa29e0b9a8e2e4ea034c3ba8b286fe"
+    },
+    {
+      "path": "datasets/noise/aJd7SEyCWjg.wav",
+      "lfs_oid_sha256": "b7f757fb11ad96c362eb7d8136095d478a4f156de2e4835a102d9e5a23bfb5a4",
+      "lfs_size": 320078,
+      "score": "001b548b369b62a18d7f172d2ae36fc77f664b0dff7cb653ff870dcdf3ce66a8"
+    },
+    {
+      "path": "datasets/noise/2SF_FyFM-3U.wav",
+      "lfs_oid_sha256": "708d15121059b74d4ff9625f3a22a5ab66fda1a5d004e1ecf2246a39163713c7",
+      "lfs_size": 320078,
+      "score": "001c44597a4185924d61e0add79bebe66dc374d6b1589957154bc8b468bbc033"
+    },
+    {
+      "path": "datasets/noise/door_Freesound_validated_238332_4.wav",
+      "lfs_oid_sha256": "eb5411baacf55b0926a27469f627ab5884684e15c981cbdeb6c169ee3df8a3a6",
+      "lfs_size": 320044,
+      "score": "001d7b18ef8fe395539ddee37528e0c8042c525738bad53d05e73e95aa3b8264"
+    },
+    {
+      "path": "datasets/noise/WeIsFEW2-IM.wav",
+      "lfs_oid_sha256": "e177c2c21bd1f4e8486c7d70b42e218737dbb39a80563d8936e63ca283c0cfcf",
+      "lfs_size": 320078,
+      "score": "002028f0bd1dcec0e7c9a6093c6532782fee1e5005f0dd3f475d24f2c99c6d62"
+    },
+    {
+      "path": "datasets/noise/Frw6t2jQiuE.wav",
+      "lfs_oid_sha256": "ebd924f07600296a3ec4f1ff8a86491aebebb450901aa998aed5e6ff053c61ed",
+      "lfs_size": 320078,
+      "score": "00211144648b35ce7ffb3c4cddadf056e73cc8481828f129e32c43e653c58183"
+    },
+    {
+      "path": "datasets/noise/dxzVErgqxQ8.wav",
+      "lfs_oid_sha256": "dd05e0db57624cf02c9cc96fa2665accf693d3773ea2f76aedad5975465613c4",
+      "lfs_size": 320078,
+      "score": "002136b0469448ae45c74c9219ac5f8a881be73854d84e092462e7ab7e33d238"
+    },
+    {
+      "path": "datasets/noise/3GqU3j4CL7A.wav",
+      "lfs_oid_sha256": "2d41722bdd667a9b622f8977261372a14ab5631adaeef05ffbb2dcdf743bce10",
+      "lfs_size": 320078,
+      "score": "0021397720a3b5441be1913bd2e07702c8976daeb7809e70e1985a6eb4fcb67c"
+    },
+    {
+      "path": "datasets/noise/5ElIib4eabM.wav",
+      "lfs_oid_sha256": "11976519a95d6398db4673beba0d23d5ebac581e171635dc461d01ba445980d5",
+      "lfs_size": 224078,
+      "score": "00218c121ed1527eecd1862287907d9e4d88a5bb6c2d9f97aa0676eb8cf9338e"
+    },
+    {
+      "path": "datasets/noise/VrNv_CtLZpM.wav",
+      "lfs_oid_sha256": "4706c801258459e3cd8207ac8c7a7005af6797f89b1258dff9705fe72ca89cc6",
+      "lfs_size": 320078,
+      "score": "0022e51c86f500d6bb0f1505245bfaee4a47192e5efa9857f05a57ed4def5356"
+    },
+    {
+      "path": "datasets/noise/khLyVt8Wi_E.wav",
+      "lfs_oid_sha256": "debfe79989d1289a067385636f07fda3bfc18e6b66bffa76b765605cd8e6f0a7",
+      "lfs_size": 320078,
+      "score": "00234303decdfb928e8bab6a05cb4be68481096a2284bd85d00cb136f0a73bd4"
+    },
+    {
+      "path": "datasets/noise/BTv-asx9SF4.wav",
+      "lfs_oid_sha256": "db116c4f983df22dd5aaabebb204d297300fee74b9592420805dd3aea6f032ff",
+      "lfs_size": 320078,
+      "score": "002345301d9efcb7a52bd2e47475797f38962b725674b24e104bde04b7c89a0e"
+    },
+    {
+      "path": "datasets/noise/P0S4FnwVTy4.wav",
+      "lfs_oid_sha256": "e7a8ca50af5dc40b80e70411c4072c6e8236238d076eaf210b90c70c53707ec2",
+      "lfs_size": 320078,
+      "score": "00234a69ada574b03b435d853dcafd0efabc85cef8f719b8cada5b6c4cf76b94"
+    },
+    {
+      "path": "datasets/noise/b9HyrjFUyBQ.wav",
+      "lfs_oid_sha256": "d3c3fa4abda42f71b52e91cebc9af15f90735914b6bb9c9e5e5caf60c8438e6c",
+      "lfs_size": 320078,
+      "score": "0023d724c5741c8e7b0b36e46b6c82bbaf7dd43b171f3bb1792b1ca977343ccf"
+    },
+    {
+      "path": "datasets/noise/RYeJc0trSNg.wav",
+      "lfs_oid_sha256": "1871f8303124866a578fcdf059f42d55b7d061acd7d3509840a9d059ae8b5bd9",
+      "lfs_size": 320078,
+      "score": "0028812f464d14fc31cf062e7ad8523b738e648315be488602b2ad18066cb305"
+    },
+    {
+      "path": "datasets/noise/otvzjK9XR7I.wav",
+      "lfs_oid_sha256": "ca2cbf2b3e7376e3eafbaab7640967ddeab6a50b18f6bd29bdc68d9d3b6b0763",
+      "lfs_size": 320078,
+      "score": "00289575f60b6ab86342e1c59975b4fb7ca91149c788faa5ec3b3ff2bf813943"
+    },
+    {
+      "path": "datasets/noise/CddZ28W-RH4.wav",
+      "lfs_oid_sha256": "e3afe71bd2a8531a1cf8f3eb3bf298e8cd883dd13479829f5f3e90713e56a3ef",
+      "lfs_size": 320078,
+      "score": "002a0b4a99ebf9be11e86b2ff255766552d5e7b6e670ce2f22e5b9af54ff8618"
+    },
+    {
+      "path": "datasets/noise/ibrIFgQGdew.wav",
+      "lfs_oid_sha256": "04643c500c0e22132bef1662d23a8a542e4b854145ea25a84ad03b52407df19b",
+      "lfs_size": 320078,
+      "score": "002a932e2c34fe36b080ea383ebd4d5af209a6fa0e7b1e962d4fd77019ae0640"
+    },
+    {
+      "path": "datasets/noise/fan_Freesound_validated_462454_0.wav",
+      "lfs_oid_sha256": "0f49be0e18826065d911529b47f7806811c3dc271bd193f9983ee676705460dc",
+      "lfs_size": 320044,
+      "score": "002aea40202529c1cb8a56e6b4c3cb0d0add354d8cfd27d64c95d54743b2bf50"
+    },
+    {
+      "path": "datasets/noise/0vBOc1eWq6k.wav",
+      "lfs_oid_sha256": "a31d101e985c079cf97689de9f138e7ef2faa3f621f28522f48927b18ba8cfbf",
+      "lfs_size": 320078,
+      "score": "002bbdce9b126b94bd5cb9b98a6514606587ac55ef87a9ef7aa41bcba1073f2e"
+    },
+    {
+      "path": "datasets/noise/munching_Freesound_validated_251451__jennerallydrawing__crunches2_7.wav",
+      "lfs_oid_sha256": "3d7c16885b6f17e158a4d5c1e129636d11b4df765569ecfb28bedace3911524a",
+      "lfs_size": 960044,
+      "score": "002ca4ba82f0966f446f5877b10138a5d95711394d7ec21de86bb0f7f3f10be5"
+    },
+    {
+      "path": "datasets/noise/door_Freesound_validated_161441_1.wav",
+      "lfs_oid_sha256": "a68bd93c6a5904c788be841615dc6f8837f51bdfa0b0b62d0c6e37e6e5a1ef37",
+      "lfs_size": 320044,
+      "score": "002e41bae663a7776fd52b8b54a821f2bb7a7825ce71cffa34ba74b3a2022885"
+    },
+    {
+      "path": "datasets/noise/YFD1Qrlskrg.wav",
+      "lfs_oid_sha256": "fd221c17bfa4c12f376c9a544889bd68d27760182c212310d050d80c0b287ec3",
+      "lfs_size": 320078,
+      "score": "002ea471de492d82323de79e2a8784f999192dae703be159aafd60409e2f24bf"
+    },
+    {
+      "path": "datasets/noise/57-vjVZ7Pso.wav",
+      "lfs_oid_sha256": "ed28121045ba79cdee169e3ca3613e160c398dad1a5e736403a85767bdaf4f5e",
+      "lfs_size": 304586,
+      "score": "00303686862a3691eca8c382dbfb406daef552c8a6a553f7362c45c555a40555"
+    },
+    {
+      "path": "datasets/noise/iY5L4Km5hH8.wav",
+      "lfs_oid_sha256": "4330d45071ad24ef121652f424780501fbda179c18c8b55f090460bc18fa6a0c",
+      "lfs_size": 320078,
+      "score": "0030891383ae815628782a16de0736fc8c906fa8d223e92f243a784975307856"
+    },
+    {
+      "path": "datasets/noise/9_n1iVKV4YM.wav",
+      "lfs_oid_sha256": "fff640d5fac4fb6178fab9f953c9e90e27b9b99ad331703ed39934299bb4a55f",
+      "lfs_size": 320078,
+      "score": "0030c04822f975f7c00aeb0667a21fd608f77002ff0bafe5154ceb0a0904c50b"
+    },
+    {
+      "path": "datasets/noise/5WWlYhZ3hTg.wav",
+      "lfs_oid_sha256": "8f48bfb8dfa70980d0fb0fb87d04ca607898206f18bf325907f5616347e7b111",
+      "lfs_size": 310596,
+      "score": "0031cecdd674124c3bde5abe2f8fa15fa5184afa647044b50b9b4205eaacd230"
+    },
+    {
+      "path": "datasets/noise/p9ZFjG-vCIQ.wav",
+      "lfs_oid_sha256": "a103385094d33b6253d86a63b59714b3b99048d5c2487237464f39f43435eb47",
+      "lfs_size": 320078,
+      "score": "00325f2b94afb52442c54f1abfe77a388fa4366ceab2ab5709f5c935344ddbe1"
+    },
+    {
+      "path": "datasets/noise/2y8u6nNdXMI.wav",
+      "lfs_oid_sha256": "57552b95b56bc09461cf52dafb685afc50cda159432cb96ffc0a9d13d332fdac",
+      "lfs_size": 320078,
+      "score": "003338f68dd51cfcaaeee5037e283441f0c5276959c68a0256dc027f31a2567c"
+    },
+    {
+      "path": "datasets/noise/oV6kWFON0mM.wav",
+      "lfs_oid_sha256": "acaa9e45bf7063e48f60227efeb9755765576a8f038103c9edc6428c4fd9acec",
+      "lfs_size": 320078,
+      "score": "00348245e0daaf92c6ce2d0ca443e736be1141f27544f7a60849aea6d516fc0b"
+    },
+    {
+      "path": "datasets/noise/typing_Freesound_validated_320550_2.wav",
+      "lfs_oid_sha256": "6d7c2c4d7cbe4c70bb7c0d8cc0bf9143a5b42003ac1d012eb816b079f1050e71",
+      "lfs_size": 320044,
+      "score": "003571671ee8deea041f445a5f2f4fed294a07947a9815647951c9200c0032cd"
+    },
+    {
+      "path": "datasets/noise/vb_WywB7elo.wav",
+      "lfs_oid_sha256": "0246321d11ecbfa83c92de7020a0a6b475b37276af2782a974466427adafcb40",
+      "lfs_size": 320078,
+      "score": "003581b89338726b200e7f85fe5f27066af02f34917d3213f031005140940186"
+    },
+    {
+      "path": "datasets/noise/fLj6vK8DmKo.wav",
+      "lfs_oid_sha256": "bfb71e41200f6a8bb1c72519b49530923e83d979777f49637496ae8025fa7f82",
+      "lfs_size": 320078,
+      "score": "0036b2dc7c396fc24736ae08f07cef5c47ac87f4da326d7b41b220788ff80092"
+    },
+    {
+      "path": "datasets/noise/6arb-ycu6do.wav",
+      "lfs_oid_sha256": "9dbc86cefcc8374c5502e5e911e021e10cc578c8e0e7c73dba71ccb012f2bff5",
+      "lfs_size": 320078,
+      "score": "00370612251ed1081468ecda67e62a40a4287d79a45b6b7146eed8e62d41414f"
+    },
+    {
+      "path": "datasets/noise/squeak_squeakyChair_Freesound_validated_413694_11.wav",
+      "lfs_oid_sha256": "addf2dab3564b34ae4f7b13ed372e0697facacc96e618f332e06c1b0efe07d5e",
+      "lfs_size": 320044,
+      "score": "0039813e07ea8cfd3623c2a3f7703ccc0421ecfe5db90f9b7063c4551fba094c"
+    },
+    {
+      "path": "datasets/noise/4v6G5PJkMkY.wav",
+      "lfs_oid_sha256": "a4520944c309b6d927b97065720c892c50b9731349ff36a40c4b4d6713ebab4a",
+      "lfs_size": 320078,
+      "score": "0039b47848d6c17b211e7b7772fd1726e5a47a907e0184f03b440c584197473c"
+    },
+    {
+      "path": "datasets/noise/0z2QTX_Ktrw.wav",
+      "lfs_oid_sha256": "73bd62575dee58d18812becc2b7d75b3d10489b1cb54da3a78aed578b5576d8d",
+      "lfs_size": 320078,
+      "score": "003bcaf577064e569c32dc20e78458707df11ba057d8511edfc45426f76107d2"
+    }
+  ],
+  "exact_test_hash_overlap": [],
+  "test_files_excluded": 300,
+  "mixing_plan": {
+    "sample_rate": 16000,
+    "duration_seconds": 10.0,
+    "snr_levels_db": [
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      15.0
+    ],
+    "target_clean_rms_levels_dbfs": [
+      -35.0,
+      -30.0,
+      -25.0,
+      -20.0
+    ],
+    "peak_limit": 0.99
+  },
+  "policy": "Cross-domain development only. Never merge with DNS1 no-reverb test results or present as an external test."
+}

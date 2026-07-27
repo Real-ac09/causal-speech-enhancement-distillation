@@ -1,0 +1,83 @@
+protocol_id: v14_2_privileged_distillation_final_2026-07-25
+status: frozen
+frozen_at: '2026-07-25'
+research_label: CN-VQG-GRU-T1-PD
+claim:
+  scope: single-seed quality upgrade to the frozen lightweight causal model
+  selection_statement: >-
+    Confidence-weighted privileged distillation improved protected-development
+    PESQ by 0.11894 with a paired 95% confidence interval of [0.10395, 0.13358]
+    while passing the predeclared SI-SDR, STOI, ESTOI, and per-file harm gates.
+  exclusions:
+    - multi-seed uncertainty for the distillation improvement
+    - project-wide pristine use of the VoiceBank+DEMAND standard test set
+    - architecture or checkpoint reselection after standard-test evaluation
+    - generalisation to unseen corpora before external-holdout evaluation
+model:
+  implementation: predictive_noise_vq_mamba_v8
+  architecture_alias_in_checkpoint: causal_temporal_core_v12
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  algorithmic_latency_ms: 20.0
+  parameter_count: 808095
+  temporal_core: gru
+  temporal_hidden_dim: 232
+  time_kernel_size: 1
+  reconstruction: direct_scalar_mask
+  deployment_teacher_required: false
+selection_evidence:
+  programme_status:
+    path: results/v14/distillation/programme_status.json
+    sha256: d0cda258860e7bd0e354a4bde2a93d793f03c75a51b932ceee25efe20497daa7
+  search_decision:
+    path: results/v14/distillation/search_decision.json
+    sha256: 2e9d82d129351ab0116a24b4b181bdd642cbf437a704bc60ab78dc9e5db0e2ad
+  protected_development_comparison:
+    path: results/v14/distillation/winner_vs_v13/comparison.json
+    sha256: fb110045c50e271137f695902177ac6c20ac2c40a9ca06551fab4f86e638f410
+checkpoint:
+  seed: 1200
+  epoch: 3
+  path: checkpoints/v14/distillation/mag_005/epoch_003.pt
+  sha256: 0b58d6def618cc67db7b14848c406015f76b25c247757d797120ff3a2801f891
+  training_config: configs/v14/generated/distillation/mag_005.yaml
+  training_config_sha256: 776a24265f2a14d9cdf19cd7896861d3fe57af2db4317989f9d2f0799a402d75
+reference:
+  label: V13-seed1200
+  summary: results/v13/final_standard_test/seed1200/summary.json
+  summary_sha256: 24c43bef24e8abacf3a71f9768682f9bf23e4b9c6e6383daed9123793b93d4a9
+  per_file_metrics: results/v13/final_standard_test/seed1200/per_file_metrics.csv
+  per_file_metrics_sha256: e807ecf1722e7ad7b8f975160629e767b7a1b46f086693af85f3d9e814d13df6
+standard_test:
+  metadata: data/processed/voicebank_demand/metadata/test.csv
+  metadata_sha256: 33454f6151a30bbae211a74c54c118f48413ee02a396943d0ed8754c08bff679
+  items: 824
+  historical_project_use: true
+  policy: >-
+    Use only for the frozen comparability evaluation. Do not use its results
+    to change the architecture, loss, training recipe, or checkpoint.
+evaluation:
+  quality_device: cuda
+  weights: model
+  full_utterance: true
+  bootstrap_samples: 20000
+  bootstrap_seed: 14200
+  runtime_threads: 1
+  runtime_warmup_seconds: 1.0
+  runtime_measurement_seconds: 30.0
+  runtime_gate:
+    p95_below_hop_deadline: true
+    p99_below_hop_deadline: true
+  post_test_policy: no_architecture_loss_recipe_or_checkpoint_reselection
+source_files:
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8
+  src/cnvqg/models/v8_native_streaming.py: 5a27698ce02b7076632d5bd59422c72db358d426fe4c71f21db745c91026d139
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/metrics/speech_metrics.py: 5ecd6e6a3de3796adeb509a63d3597f0c90509a1cc246f59ee4cc5caefbc4eee
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/compare_evaluations.py: 23342cb09f0b56fac932347b373d25ea9c02234d8abe17797b85892ef5d587b2
+  scripts/measure_latency.py: a82b0a5cab998f47e00345f388efe5fec9527a69f7fe9be7ad2075c5090bf9da

@@ -1,0 +1,68 @@
+policy_id: v16_pareto_safe_utterance_strength_2026-07-26
+status: frozen
+frozen_at: '2026-07-26'
+role: training_target_generation_only
+external_test_permitted: false
+development_set_permitted: false
+strength_grid:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+feasibility:
+  pesq:
+    minimum_noisy_delta: -0.005
+    minimum_full_strength_delta: -0.020
+  si_sdr:
+    minimum_noisy_delta_db: -0.10
+  stoi:
+    minimum_noisy_delta: -0.001
+  estoi:
+    minimum_noisy_delta: -0.002
+utility:
+  description: >-
+    Weighted, scale-normalised improvement over the noisy input. Feasibility
+    is applied first; utility ranks only safe strengths. If no strength is
+    feasible, minimise normalised constraint violation before utility.
+  metrics:
+    pesq:
+      weight: 0.30
+      scale: 0.10
+    si_sdr:
+      weight: 0.15
+      scale: 1.0
+    stoi:
+      weight: 0.35
+      scale: 0.01
+    estoi:
+      weight: 0.20
+      scale: 0.02
+tie_break:
+  - higher_utility
+  - higher_pesq
+  - higher_stoi
+  - higher_strength
+missing_metric_policy:
+  all_strengths_unavailable: exclude_and_renormalize_available_utility_weights
+  partial_availability: fail
+  required_available_metrics:
+    - si_sdr
+    - stoi
+    - estoi
+  recording: per_item_missing_metrics_and_aggregate_counts
+amendment:
+  id: v16_missing_pesq_instrumentation_2026-07-26
+  reason: >-
+    PESQ returned unavailable for every strength on training item
+    v16_dns_0237 although the waveform and the three remaining metrics were
+    valid. The rule is metric-agnostic, applies only to complete unavailability
+    across the entire strength grid, and was frozen before any model training
+    or development evaluation.
+  supersedes_policy_sha256: cc2811d7380c3d9b33bec1226a602ef05c525490b1244a9d02b49075a7cd7aaa
+  external_test_used: false
+  development_set_used: false
+claim_policy: >-
+  Oracle labels use clean references and are privileged training targets.
+  Oracle-selected metrics are diagnostic upper bounds and must never be
+  reported as deployable model performance.

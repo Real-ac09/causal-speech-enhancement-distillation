@@ -1,0 +1,52 @@
+version: v17_recipe6
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe 5b reached eight of nine gates and missed only the avoidable
+  violation target. The clean-reference-free proxy ceiling showed that
+  utterance-aggregated acoustic and backbone features predict safety much
+  better than the existing temporal head. Constant-memory causal prefix
+  statistics should close that safety gap without sacrificing PESQ.
+only_architecture_change_from_recipe5b:
+  - add_causal_prefix_mean_standard_deviation_minimum_maximum_and_change_rate
+initialisation:
+  checkpoint: checkpoints/v17/utility_safety_recipe5b_balanced_seed17045/epoch_007.pt
+  compatible_weights_loaded_non_strictly: true
+  statistics_projection_zero_initialised: true
+retained:
+  - recipe4_balanced_domain_class_sampling
+  - recipe5_prepared_soft_policy_targets
+  - recipe5_utility_safety_metric_heads
+  - recipe5_loss_weights_and_clips
+  - recipe5_selector_equation
+  - twelve_clean_reference_free_causal_features
+  - hidden_dimension_16
+  - frozen_candidate_a_backbone
+  - true_waveform_residual_blend
+  - eight_epochs
+  - unchanged_nine_check_selection_gate
+real_time_constraints:
+  causal: true
+  statistics_memory_growth_with_stream_duration: false
+  statistics_state_values_per_stream: 457
+  controller_parameter_cap: 10000
+  expected_controller_parameters: 9699
+preflight_revision:
+  issue: first_frame_standard_deviation_had_singular_zero_variance_gradient
+  correction: add_fixed_1e-6_variance_epsilon
+  full_training_started_before_correction: false
+validated_preflight:
+  finite_gradient_and_checkpoint_smoke: true
+  batched_streaming_statistics_max_abs_error: 6.854534149169922e-07
+  native_waveform_max_abs_error: 7.450580596923828e-09
+  native_state_elements_after_test_stream: 32020
+training:
+  config: configs/v17/utility_safety_recipe6_statistics_seed17046.yaml
+  script: scripts/train_v17_recipe6.py
+  seed: 17046
+  learning_rate: 0.00025
+  development_set_used: false
+  external_test_used: false
+decision:
+  pass: advance_recipe6_to_frozen_development_benchmarks
+  fail: stop_recipe6_and_reassess_prefix_target_alignment

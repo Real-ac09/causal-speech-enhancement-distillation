@@ -1,0 +1,36 @@
+teacher_checkpoint: checkpoints/streaming_hybrid_v2_teacher/best.pt
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 4
+student_model:
+  architecture: streaming_hybrid_v2
+  variant: student
+  use_mamba: true
+loss:
+  waveform_l1_weight: 1.0
+  si_sdr_weight: 0.3
+  stft_weight: 1.0
+  vq_weight: 0.1
+  mel_weight: 0.15
+  complex_stft_weight: 0.1
+  noise_prediction_weight: 0.1
+distillation:
+  waveform_weight: 0.3
+  spectrum_weight: 0.3
+  gain_weight: 0.1
+  phase_weight: 0.05
+  speech_feature_weight: 0.1
+  noise_feature_weight: 0.1
+  noise_prediction_weight: 0.05
+training:
+  epochs: 40
+  learning_rate: 0.00015
+  weight_decay: 0.00001
+  distillation_warmup_epochs: 3
+paths:
+  checkpoint_dir: checkpoints
+  experiment_name: streaming_hybrid_v2_student_distilled

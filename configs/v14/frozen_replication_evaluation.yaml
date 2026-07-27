@@ -1,0 +1,97 @@
+protocol_id: v14_2_three_seed_and_external_evaluation_2026-07-25
+status: frozen
+frozen_at: '2026-07-25'
+purpose: >-
+  Measure the fixed-recipe V14.2 improvement across three paired training
+  seeds and assess generalisation on an independently sourced DNS1 corpus.
+claim_policy:
+  architecture_reselection_permitted: false
+  loss_or_recipe_reselection_permitted: false
+  epoch_or_checkpoint_reselection_permitted: false
+  standard_test_used_for_selection: false
+  external_holdout_used_for_selection: false
+  external_primary_condition: synthetic_no_reverb
+training_execution:
+  path: results/v14/replication/training_execution_record.json
+  sha256: 49192f87711f7efb961baad848ed1babd9557e35110d8739bc0d18c25f3e8391
+model:
+  architecture: causal_temporal_core_v12
+  parameter_count: 808095
+  algorithmic_latency_ms: 20.0
+  deployment_teacher_required: false
+datasets:
+  standard:
+    description: VoiceBank+DEMAND standard comparability test
+    metadata: data/processed/voicebank_demand/metadata/test.csv
+    metadata_sha256: 33454f6151a30bbae211a74c54c118f48413ee02a396943d0ed8754c08bff679
+    items: 824
+    project_wide_pristine: false
+  external:
+    description: Microsoft DNS Challenge 1 synthetic no-reverb paired test
+    metadata: data/processed/dns1_external/no_reverb_test.csv
+    metadata_sha256: 6f7b73e615caa8c7c310c8fbf8b8fe82b3713b520c10b135c784f84b5f42b7d3
+    manifest: data/processed/dns1_external/manifest.json
+    manifest_sha256: 3eb7fd79f6019d520655c2d5b406ce82407dc16e366f88983287a3c0978e785b
+    source_commit: 70f19285c36cca4df2338f9248775ddc50980c6b
+    items: 150
+    used_before_freeze: false
+models:
+  v13:
+    label: CN-VQG-GRU-T1
+    checkpoints:
+      - seed: 1200
+        path: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+        sha256: 5216893ac37a2ee0d3fb5b122a071433bf50bdd8917b28d2ee95db62bb385c97
+      - seed: 1201
+        path: checkpoints/v12/full/gru_matched_time1_seed1201/best.pt
+        sha256: 7c2cb1e5d0dac71c5a80a78e9c00c9f4b83e8ed2df050e29e8ca5253ac94370b
+      - seed: 1202
+        path: checkpoints/v12/full/gru_matched_time1_seed1202/best.pt
+        sha256: 34f3456bc7a1f7a111b75ce2e1a836eafd5c86eaded7ce95b34b8ceba009665e
+  v14_2:
+    label: CN-VQG-GRU-T1-PD
+    checkpoints:
+      - seed: 1200
+        path: checkpoints/v14/distillation/mag_005/epoch_003.pt
+        sha256: 0b58d6def618cc67db7b14848c406015f76b25c247757d797120ff3a2801f891
+      - seed: 1201
+        path: checkpoints/v14/distillation/mag_005_seed1201_fixed_epoch3/epoch_003.pt
+        sha256: 540a8f64242134d8380024d7e2a6049c9e20b75cba78389a01d007a089ec2b84
+      - seed: 1202
+        path: checkpoints/v14/distillation/mag_005_seed1202_fixed_epoch3/epoch_003.pt
+        sha256: 8944829a3fe6bbd5f772da22037d4dca1f6c41931686e1c2c937baaa7ee67e3b
+existing_evaluations:
+  standard:
+    v13:
+      '1200': results/v13/final_standard_test/seed1200
+      '1201': results/v13/final_standard_test/seed1201
+      '1202': results/v13/final_standard_test/seed1202
+    v14_2:
+      '1200': results/v14/final_standard_test/seed1200
+evaluation:
+  output_root: results/v14/replication_evaluation
+  device: cuda
+  weights: model
+  full_utterance: true
+  bootstrap_method: hierarchical_seed_and_file
+  bootstrap_samples: 20000
+  bootstrap_seed: 14204
+  comparison_bootstrap_seed: 14205
+  post_test_policy: no_model_recipe_epoch_or_checkpoint_reselection
+source_files:
+  scripts/run_v14_replication_evaluation.py: 67a25bdbec9644e6fb98db93f6a2830d019384cb3d67ab71da5c4b8ae31834fa
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/aggregate_final_model_seeds.py: 747a146ba57b357e86bf80eff74aa9eed945010604780f69f345d0e9677443df
+  scripts/compare_paired_seed_ensembles.py: e0e2ca11806d14db39cc0e35ccfce5240fae8cf483bfbdec7202655134a17afc
+  src/cnvqg/metrics/speech_metrics.py: 5ecd6e6a3de3796adeb509a63d3597f0c90509a1cc246f59ee4cc5caefbc4eee
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8
+  results/v13/final_standard_test/seed1200/summary.json: 24c43bef24e8abacf3a71f9768682f9bf23e4b9c6e6383daed9123793b93d4a9
+  results/v13/final_standard_test/seed1200/per_file_metrics.csv: e807ecf1722e7ad7b8f975160629e767b7a1b46f086693af85f3d9e814d13df6
+  results/v13/final_standard_test/seed1201/summary.json: 9563981e04929029947e69f0cbf47e3437f769ca080e0d865424409313f226d1
+  results/v13/final_standard_test/seed1201/per_file_metrics.csv: 781425ef2735be3a108116b40299c0b21af4b639cebfedb17bcafe2b87bf11e9
+  results/v13/final_standard_test/seed1202/summary.json: 57637860239c690f731090d7ee1bb164dd9c060fc510dded53dd5b4b5825fe84
+  results/v13/final_standard_test/seed1202/per_file_metrics.csv: 4cf0fa7a8e85010113636c52968765482db1f8a51e32ffb0bc4b017f4f5b35e6
+  results/v14/final_standard_test/seed1200/summary.json: 9f962bbbe1c834d817380a5d68ea0ef020c3592353265af3dde6ddd1b0cf5e3f
+  results/v14/final_standard_test/seed1200/per_file_metrics.csv: 6a88081ad94803fa911b2a5e5332c8ec68a71b8903126fcd18b1c18ef6843ae6

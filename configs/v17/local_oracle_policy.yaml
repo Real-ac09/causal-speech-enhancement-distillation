@@ -1,0 +1,86 @@
+policy_id: v17_recipe2_pareto_safe_local_strength_2026-07-26
+status: frozen
+frozen_at: '2026-07-26'
+role: training_target_generation_only
+external_test_permitted: false
+development_set_permitted: false
+window:
+  duration_seconds: 2.0
+  stride_seconds: 1.0
+  starts_seconds:
+    - 0.0
+    - 1.0
+    - 2.0
+  minimum_valid_audio_seconds: 1.0
+  causal_state: reset_at_each_window_start
+  metric_audio: valid_unpadded_prefix_only
+strength_grid:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+feasibility:
+  pesq:
+    minimum_noisy_delta: -0.005
+    minimum_full_strength_delta: -0.020
+  si_sdr:
+    minimum_noisy_delta_db: -0.10
+  stoi:
+    minimum_noisy_delta: -0.001
+  estoi:
+    minimum_noisy_delta: -0.002
+utility:
+  description: >-
+    The frozen V16 scale-normalised improvement utility, now evaluated on
+    each valid local window. Feasibility is applied before utility.
+  metrics:
+    pesq:
+      weight: 0.30
+      scale: 0.10
+    si_sdr:
+      weight: 0.15
+      scale: 1.0
+    stoi:
+      weight: 0.35
+      scale: 0.01
+    estoi:
+      weight: 0.20
+      scale: 0.02
+tie_break:
+  - higher_utility
+  - higher_pesq
+  - higher_stoi
+  - higher_strength
+missing_metric_policy:
+  all_strengths_unavailable: exclude_and_renormalize_available_utility_weights
+  partial_availability: >-
+    exclude_metric_for_entire_item_and_renormalize_available_utility_weights
+  required_available_metrics:
+    - si_sdr
+    - stoi
+    - estoi
+  recording: per_window_missing_metrics_and_aggregate_counts
+amendment:
+  id: v17_recipe2_partial_pesq_instrumentation_2026-07-26
+  amended_at: '2026-07-26'
+  supersedes_policy_sha256: c57e051ee16abe596f1ec0b5b972dbb24ee31ed0b5bd43d3b13f938d41f54206
+  reason: >-
+    Before controller training, calibration window
+    v16_vb_1332_p227_249_local_w0 returned no noisy PESQ and no enhanced PESQ
+    for strengths 0, 0.25, and 0.5, while enhanced PESQ was available at
+    strengths 0.75 and 1. Comparing a partially observed metric would bias
+    candidate selection. The metric-agnostic rule therefore excludes that
+    metric for the entire affected window and renormalises the already-frozen
+    SI-SDR, STOI, and ESTOI weights. Partial availability of a required metric
+    still fails. All 3,437 training labels completed under the superseded
+    policy; none encountered partial metric availability, so they are
+    unaffected.
+  completed_training_labels_preserved: 3437
+  safely_checkpointed_calibration_labels: 250
+  development_set_used: false
+  external_test_used: false
+claim_policy: >-
+  Local oracle labels use clean references and are privileged training
+  targets. Oracle metrics are diagnostic upper bounds, not deployable model
+  performance.

@@ -1,0 +1,165 @@
+protocol_id: v16_oracle_supervised_waveform_residual_gate_2026-07-26
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+repository_commit_at_freeze: eec6cf661392763ab546b72520fc224c7cd42b7c
+amendment:
+  id: v16_missing_pesq_instrumentation_2026-07-26
+  amended_at: '2026-07-26T11:30:45+01:00'
+  supersedes_protocol_sha256: f0998458e0f758bf01741676b5dbc27d64ae6bc125b6251d6ec4de6822957357
+  reason: >-
+    Training item v16_dns_0237 produced no PESQ value at any candidate
+    strength. Before model training or development evaluation, the
+    metric-agnostic rule was frozen to exclude only a metric unavailable at
+    every strength, renormalise the remaining fixed utility weights, require
+    SI-SDR, STOI, and ESTOI, and record every omission. Partial metric
+    availability still fails closed.
+  labels_safely_checkpointed_before_failure: 1425
+  development_set_used: false
+  external_test_used: false
+
+hypothesis: >-
+  Candidate D failed because its unsupervised spectral controller saturated
+  near full enhancement and its zero-strength path was not a true waveform
+  bypass. A small causal controller trained on Pareto-safe, clean-reference
+  oracle strengths can preserve Candidate A's VoiceBank quality while applying
+  weaker enhancement where full strength harms cross-domain intelligibility.
+
+candidate_budget:
+  candidates: 1
+  architecture_sweeps_permitted: false
+  post_evaluation_retuning_permitted: false
+  replication_condition: all_frozen_promotion_gates_pass
+  failure_action: close_v16_and_write_postmortem
+
+data_boundary:
+  oracle_roles:
+    - training
+    - training_calibration
+  oracle_development_data_permitted: false
+  oracle_external_test_data_permitted: false
+  corpus:
+    voicebank_training: 1200
+    voicebank_training_calibration: 200
+    dns_training: 240
+    dns_training_calibration: 60
+    sample_rate: 16000
+    fixed_duration_seconds: 4.0
+  dns_policy: >-
+    Every selected DNS clean and noise LFS object is disjoint from the frozen
+    V15 cross-domain development assets. Asset selection was completed before
+    downloading audio or computing any oracle score.
+  voicebank_policy: >-
+    Training and training-calibration speakers are disjoint. The frozen
+    calibration speakers are p227 and p286; neither appears in V16 training.
+  external_test_policy: >-
+    The external test remains sealed. V16 candidate development and selection
+    use only the named training, training-calibration, cross-domain development,
+    and VoiceBank development sets.
+
+oracle_target:
+  policy: configs/v16/oracle_strength_policy.yaml
+  strengths:
+    - 0.0
+    - 0.25
+    - 0.5
+    - 0.75
+    - 1.0
+  target_scope: one_strength_per_fixed_training_utterance
+  clean_reference_available_at_inference: false
+  oracle_metrics_are_deployable_claims: false
+  resumable_checkpoint_every_items: 25
+  missing_metric_rule: >-
+    A metric unavailable at every strength is excluded and the remaining
+    pre-frozen weights are renormalised. SI-SDR, STOI, and ESTOI must remain
+    available; partial availability is an error.
+
+model:
+  architecture: causal_oracle_residual_gate_v16
+  frozen_backbone: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  blend: noisy_plus_strength_times_backbone_minus_noisy
+  exact_zero_strength_bypass: true
+  exact_full_strength_endpoint: true
+  gate_hidden_dim: 16
+  gate_initial_strength: 0.75
+  trainable_parameter_pattern:
+    - confidence_gate
+  maximum_gate_parameters: 10000
+  causal: true
+  constant_work_streaming: true
+
+training:
+  config: configs/v16/oracle_gate_seed16040.yaml
+  seed: 16040
+  epochs: 5
+  early_stopping: false
+  checkpoint_selection: minimum_training_calibration_gate_supervision_loss
+  train_domain_sampling: equal_expected_voicebank_and_dns_probability
+  random_crop: false
+  clean_input_replacement: false
+  oracle_supervision_loss: smooth_l1
+  oracle_supervision_beta: 0.05
+  auxiliary_regularisation:
+    gate_smoothness_weight: 0.002
+    waveform_l1_weight: 0.01
+    si_sdr_weight: 0.001
+    complex_stft_weight: 0.05
+
+evaluation:
+  candidate_checkpoint: checkpoints/v16/oracle_gate_seed16040/best.pt
+  cross_domain_metadata: data/processed/dns_cross_domain_dev/metadata.csv
+  voicebank_metadata: >-
+    data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv
+  cross_domain_reference: results/v15/cross_domain_dev/baselines_seed1200/v14_2
+  voicebank_reference: results/v14/distillation/winner_dev400
+  gates: configs/v15/promotion_gates.yaml
+  bootstrap_samples: 20000
+  bootstrap_seed: 16040
+  runtime:
+    native_streamer: V16NativeStreamer
+    cpu_threads: 1
+    measured_seconds: 10
+  claims: development_only_until_external_test_is_authorised
+
+execution:
+  controller: scripts/run_v16_oracle_program.py
+  ordered_stages:
+    - prepare
+    - labels
+    - train
+    - evaluate
+  resumable:
+    labels: true
+    train: true
+    evaluation: true
+  execution_record: results/v16/oracle_gate_seed16040/execution_record.json
+
+frozen_inputs:
+  configs/v16/oracle_strength_policy.yaml: 8f378ef77b225c74589e18b13aa9efabfe9802fbac60015b2bb0890fc1f79d96
+  configs/v16/oracle_corpus_selection.json: 98a868ef9c6ccc1d335ab849f498a1a7af385fc4d8b254b49c2359144f4a8dea
+  configs/v16/oracle_gate_seed16040.yaml: b9fc77cfac16ad51433e8b272fc55b6a77d0e9d310341acf064fcc97e1a752f6
+  configs/v15/promotion_gates.yaml: ddad0a8e9e92fca7c7029bc50c53d1567eaaf7602b7a873514b5548d29863488
+  configs/v15/dns_cross_domain_dev_assets.json: 6430e9fc098fee13a01e693a44c1cd5d2aaf748f7f4afcb9e27f8b46ca9c4d02
+  data/processed/voicebank_demand/metadata/train.csv: 5cdc898cb997aab244c90cf1cd6229e40e5a193ff6a58f4a21bc88233450defc
+  data/processed/dns_cross_domain_dev/metadata.csv: 5fa4e3613c86daa797176e13c9296ccf7e293bd920d0678db5a26679ebb772e9
+  data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv: 84223a4ca063f5794d43bcbfe3360b0f2fdb8b1f7d6721b040c90edea49c10af
+  checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt: 5978d1ae47d7076c0ce857e1d4d0287e787753f81f69068247d9ed571443c3c8
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/summary.json: 03b67f1a393388020a7000ac6ebac080a2c9b6cbb7ed9a5b52c7fd98a281f49e
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/per_file_metrics.csv: 325797a4e0d9d4b0e7954c14e22747eed990ba9c3f8498ed755240b39dc4745c
+  results/v14/distillation/winner_dev400/summary.json: 8b91240ee22d2feaa0608aa9a06a93431c45b46cecd3934bb6206a338bd80281
+  results/v14/distillation/winner_dev400/per_file_metrics.csv: da8fae618a522441957b7b76f4c21781eaf3ea5d2c1c8cd5111024dcf6bdb664
+
+source_files:
+  scripts/prepare_v16_oracle_corpus.py: 0146d77f873744dda3bd7a8098e34d6fe2cfd0cf7bede2fc46ef00d74d0ad6d3
+  scripts/generate_v16_oracle_labels.py: c75c66d46cf3c421c1ff9ccffb28c4fca13ceeeb3fceb250fe3cff28a7c07178
+  scripts/train_v16_gate.py: d1baf31d937d24abc0da194fe62a169ed85fed810613335dccc4ce90f54a4223
+  scripts/acquire_v16_oracle_assets.sh: b4a92cab6d2afd1ad7b07121efabf91f741e8a72873e2ef2e2d9ab7faa0fce48
+  scripts/run_v16_evaluation.py: 823619720a150c48854cab0e6ed1fb5beb561616a8fd17f55af03d9fbdfefd95
+  scripts/run_v16_oracle_program.py: 8da25b6fe7cd474d0df593caf1667180e5638e3ca54461acae3427c43ec7371c
+  scripts/measure_latency.py: ee2da016f636216271282a3acf3ad01a36a1815e2364558809946936a74c8ca3
+  scripts/train.py: 63c489ccc50959c6ef278b538c363dc4033c10eb5720b995f68b934d6af080be
+  src/cnvqg/models/causal_oracle_residual_gate_v16.py: 9ee928059da588aa9a3b37120be5f5c812e6d28fe4e8b49d6d84c8afef05730f
+  src/cnvqg/models/v16_native_streaming.py: 68b707186a343b8456bfc4c037248a991510044ccb5ae11e7efecd5d3d2eabb1
+  src/cnvqg/models/v14_native_streaming.py: db81670c95f6d685a3b09bf35bc062cf1fb273b935ff95161f98ec19bba3eec0
+  src/cnvqg/models/factory.py: c665879f8487834fe7f3470b30ae0d9c706d102c2253ae14e3c91c12615cba26
+  src/cnvqg/models/__init__.py: 7d873eee6ea1431d18190caa80d8a418f6548bf5cb62c9bada1eb1c7450e1bde
+  src/cnvqg/losses/losses.py: 4bb2c029eaefb6266bf019336803c02cf9c3f1875dd4f190119559bcef2b6371

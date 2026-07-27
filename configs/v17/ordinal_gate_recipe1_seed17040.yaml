@@ -1,0 +1,86 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 17040
+
+data:
+  train_metadata: data/processed/v17_balanced_ordinal/train.csv
+  val_metadata: data/processed/v17_balanced_ordinal/calibration.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 16
+  num_workers: 6
+  train_random_crop: false
+  clean_input_probability: 0.0
+
+model:
+  architecture: causal_ordinal_residual_gate_v17
+  backbone_checkpoint: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  gate_hidden_dim: 16
+  strength_grid:
+    - 0.0
+    - 0.25
+    - 0.5
+    - 0.75
+    - 1.0
+  gate_parameter_cap: 10000
+
+loss:
+  waveform_l1_weight: 0.0
+  si_sdr_weight: 0.0
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.0
+  noise_prediction_weight: 0.0
+  noise_spectrum_weight: 0.0
+  magnitude_weight: 0.0
+  magnitude_log_weight: 0.0
+  magnitude_ratio_weight: 0.0
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  gate_identity_weight: 0.0
+  gate_smoothness_weight: 0.001
+  gate_supervision_weight: 0.0
+  gate_classification_weight: 1.0
+  gate_class_weights:
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+
+training:
+  epochs: 8
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  gradient_accumulation_steps: 1
+  grad_clip_norm: 1.0
+  precision: bf16
+  log_every: 50
+  val_every: 1
+  trainable_parameter_patterns:
+    - confidence_gate
+  checkpoint_metric: loss_gate_classification
+  checkpoint_mode: min
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: warmup_cosine
+    warmup_epochs: 1
+    minimum_factor: 0.05
+  early_stopping:
+    enabled: false
+  perceptual_validation:
+    enabled: false
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  save_every_epoch: true
+
+paths:
+  checkpoint_dir: checkpoints/v17
+  experiment_name: ordinal_gate_recipe1_seed17040

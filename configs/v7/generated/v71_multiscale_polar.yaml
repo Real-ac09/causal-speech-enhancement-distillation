@@ -1,0 +1,93 @@
+data:
+  batch_size: 3
+  chunk_seconds: 4.0
+  num_workers: 8
+  sample_rate: 16000
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val_v51_search_100.csv
+loss:
+  complex_stft_complex_weight: 1.0
+  complex_stft_compression_power: 0.3
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_weight: 1.0
+  complex_stft_win_lengths:
+  - 320
+  compute_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  magnitude_equal_loudness: true
+  magnitude_weight: 0.5
+  mel_weight: 0.0
+  noise_prediction_weight: 0.0
+  phase_confidence_weight: 0.0
+  phase_weight: 0.0
+  si_sdr_weight: 0.05
+  stft_weight: 0.0
+  tf_detail_center: false
+  tf_detail_hop_length: 160
+  tf_detail_magnitude_power: 0.3
+  tf_detail_n_fft: 512
+  tf_detail_win_length: 320
+  vq_weight: 0.0
+  waveform_charbonnier_eps: 0.001
+  waveform_l1_weight: 0.1
+model:
+  adaptive_phase: false
+  architecture: causal_multiscale_mamba_v7
+  auxiliary_vq: false
+  bottleneck_channels: 320
+  complex_mask_residual_limit: 1.0
+  frequency_dim: 144
+  full_channels: 120
+  hop_length: 160
+  log_magnitude_limit: 1.38629436112
+  magnitude_power: 0.3
+  mamba_d_conv: 4
+  mamba_d_state: 16
+  mamba_expand: 2
+  mask_representation: polar_residual
+  middle_channels: 192
+  n_fft: 512
+  phase_gate_init: 0.75
+  phase_gate_max: 0.85
+  phase_limit: 1.57079632679
+  sample_rate: 16000
+  temporal_dim: 208
+  use_full_band: false
+  use_mamba: true
+  variant: teacher
+  win_length: 320
+paths:
+  checkpoint_dir: checkpoints/v71/search
+  experiment_name: multiscale_polar
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 7101
+training:
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  early_stopping:
+    enabled: false
+  ema:
+    enabled: false
+  epochs: 5
+  grad_clip_norm: 5.0
+  gradient_accumulation_steps: 2
+  learning_rate: 0.0001
+  log_every: 50
+  lr_scheduler:
+    name: none
+  metricgan_lite:
+    enabled: false
+  optimizer:
+    name: adamw
+  perceptual_validation:
+    enabled: true
+    max_items: 100
+  precision: bf16
+  val_every: 1
+  weight_decay: 1.0e-05

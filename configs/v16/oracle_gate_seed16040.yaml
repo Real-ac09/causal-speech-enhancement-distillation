@@ -1,0 +1,87 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 16040
+
+data:
+  train_metadata: results/v16/oracle_labels/train/metadata.csv
+  val_metadata: results/v16/oracle_labels/calibration/metadata.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 16
+  num_workers: 6
+  train_random_crop: false
+  clean_input_probability: 0.0
+
+model:
+  architecture: causal_oracle_residual_gate_v16
+  backbone_checkpoint: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  gate_hidden_dim: 16
+  gate_minimum_strength: 0.0
+  gate_initial_strength: 0.75
+  gate_parameter_cap: 10000
+
+loss:
+  waveform_l1_weight: 0.01
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.001
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.05
+  complex_stft_fft_sizes:
+    - 512
+  complex_stft_hop_sizes:
+    - 160
+  complex_stft_win_lengths:
+    - 320
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.0
+  noise_spectrum_weight: 0.0
+  magnitude_weight: 0.0
+  magnitude_log_weight: 0.0
+  magnitude_ratio_weight: 0.0
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  gate_identity_weight: 0.0
+  gate_smoothness_weight: 0.002
+  gate_supervision_weight: 1.0
+  gate_supervision_loss: smooth_l1
+  gate_supervision_beta: 0.05
+
+training:
+  epochs: 5
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  gradient_accumulation_steps: 1
+  grad_clip_norm: 1.0
+  precision: bf16
+  log_every: 50
+  val_every: 1
+  trainable_parameter_patterns:
+    - confidence_gate
+  checkpoint_metric: loss_gate_supervision
+  checkpoint_mode: min
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: warmup_cosine
+    warmup_epochs: 1
+    minimum_factor: 0.05
+  early_stopping:
+    enabled: false
+  perceptual_validation:
+    enabled: false
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  save_every_epoch: true
+
+paths:
+  checkpoint_dir: checkpoints/v16
+  experiment_name: oracle_gate_seed16040

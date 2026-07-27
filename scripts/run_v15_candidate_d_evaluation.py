@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""Evaluate fixed-epoch V15 candidate D and apply all frozen gates."""
+
+from __future__ import annotations
+
+import argparse
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CROSS_REFERENCE = Path(
+    "results/v15/cross_domain_dev/baselines_seed1200/v14_2"
+)
+VOICE_REFERENCE = Path("results/v14/distillation/winner_dev400")
+
+
+def _environment() -> dict[str, str]:
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = "src"
+    environment["LD_LIBRARY_PATH"] = (
+        "/home/mohamedb/miniconda3/envs/cnvqg/lib"
+    )
+    return environment
+
+
+def _run(command: list[str]) -> None:
+    print("+", " ".join(command), flush=True)
+    subprocess.run(command, cwd=ROOT, env=_environment(), check=True)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--candidate-name", required=True)
+    parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--bootstrap-seed", type=int, required=True)
+    parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
+    args = parser.parse_args()
+    if not args.checkpoint.is_file():
+        raise FileNotFoundError(args.checkpoint)
+
+    runtime = args.output_root / "runtime/native_cpu.json"
+    if not runtime.is_file():
+        _run(
+            [
+                sys.executable,
+                "scripts/measure_latency.py",
+                "--checkpoint",
+                str(args.checkpoint),
+                "--seconds",
+                "10",
+                "--warmup-seconds",
+                "1",
+                "--output",
+                str(runtime),
+                "--seed",
+                "15042",
+            ]
+        )
+    cross_output = args.output_root / "cross_domain_dev"
+    voice_output = args.output_root / "voicebank_dev400"
+    for metadata, output in (
+        (
+            "data/processed/dns_cross_domain_dev/metadata.csv",
+            cross_output,
+        ),
+        (
+            (
+                "data/processed/voicebank_demand/metadata/"
+                "v12_architecture_selection_400.csv"
+            ),
+            voice_output,
+        ),
+    ):
+        if not (output / "summary.json").is_file():
+            _run(
+                [
+                    sys.executable,
+                    "scripts/evaluate.py",
+                    "--checkpoint",
+                    str(args.checkpoint),
+                    "--metadata",
+                    metadata,
+                    "--output-dir",
+                    str(output),
+                    "--device",
+                    args.device,
+                    "--weights",
+                    "model",
+                ]
+            )
+
+    for reference, candidate, output, seed in (
+        (
+            CROSS_REFERENCE,
+            cross_output,
+            args.output_root / "cross_domain_comparison",
+            args.bootstrap_seed,
+        ),
+        (
+            VOICE_REFERENCE,
+            voice_output,
+            args.output_root / "voicebank_comparison",
+            args.bootstrap_seed + 1,
+        ),
+    ):
+        _run(
+            [
+                sys.executable,
+                "scripts/compare_evaluations.py",
+                "--reference",
+                f"v14_2={reference}",
+                "--candidate",
+                f"{args.candidate_name}={candidate}",
+                "--output-dir",
+                str(output),
+                "--bootstrap-samples",
+                "20000",
+                "--seed",
+                str(seed),
+            ]
+        )
+
+    _run(
+        [
+            sys.executable,
+            "scripts/gate_v15_candidate_d.py",
+            "--candidate-name",
+            args.candidate_name,
+            "--runtime",
+            str(runtime),
+            "--gates",
+            "configs/v15/promotion_gates.yaml",
+            "--cross-metadata",
+            "data/processed/dns_cross_domain_dev/metadata.csv",
+            "--cross-reference",
+            str(CROSS_REFERENCE),
+            "--cross-candidate",
+            str(cross_output),
+            "--voice-reference",
+            str(VOICE_REFERENCE),
+            "--voice-candidate",
+            str(voice_output),
+            "--output-dir",
+            str(args.output_root / "gate"),
+            "--bootstrap-samples",
+            "20000",
+            "--bootstrap-seed",
+            str(args.bootstrap_seed + 2),
+        ]
+    )
+
+
+if __name__ == "__main__":
+    main()

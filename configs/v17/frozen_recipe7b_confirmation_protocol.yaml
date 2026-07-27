@@ -1,0 +1,47 @@
+version: v17_recipe7b_confirmation
+status: prepared_not_authorized_until_primary_pass
+prepared_at: '2026-07-26'
+purpose: dissertation_grade_seed_confirmation
+entry_gate:
+  required_summary: results/v17/recipe7b_selection/summary.json
+  required_decision: advance_recipe7b_to_confirmation
+  development_or_external_test_access_before_gate: forbidden
+model_scope:
+  backbone: frozen_candidate_a
+  controller_only_training: true
+  expected_trainable_parameters: 9699
+  architecture_changes_from_primary: none
+replications:
+  seeds:
+    - 17049
+    - 17050
+    - 17051
+  epochs: inherit_primary_recipe7b
+  selected_epoch: inherit_primary_selected_epoch
+  per_seed_checkpoint_reselection: false
+  sampler: balanced_domain_class
+  order: sequential
+confirmation_criteria:
+  minimum_successful_seeds: 3
+  avoidable_violation_rate:
+    mean_maximum: 0.20
+    individual_seed_maximum: 0.22
+  mean_pesq_delta:
+    mean_minimum: 0.33
+    individual_seed_minimum: 0.32
+  non_pesq_gate_failures_allowed: 0
+reporting:
+  required:
+    - per_seed_metrics
+    - mean
+    - standard_deviation
+    - minimum
+    - maximum
+    - coefficient_of_variation
+    - primary_seed_comparison
+estimated_runtime:
+  training_and_selection_minutes: 15-25
+  excludes_final_cross_domain_benchmark: true
+decision:
+  pass: advance_confirmed_recipe7b_to_final_benchmarks
+  fail: report_recipe7b_as_unstable_and_stop_model_development

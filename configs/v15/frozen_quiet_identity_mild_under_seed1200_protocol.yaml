@@ -1,0 +1,89 @@
+protocol_id: v15_quiet_identity_mild_under_seed1200_2026-07-26
+status: frozen_conditional_before_candidate_b_result
+frozen_at: '2026-07-26'
+purpose: >-
+  Conditionally test whether a mild speech-bin underestimation penalty closes
+  the remaining absolute STOI gap after quiet-level and identity training.
+hypothesis:
+  intervention: >-
+    Retain candidate B exactly and increase magnitude-ratio
+    underestimation weight from 1.00 to 1.10.
+  architecture_change: false
+  deployed_parameter_change: 0
+  expected_mechanism: >-
+    Mildly discourage attenuation of speech-dominant bins without reproducing
+    the PESQ and SI-SDR damage seen at the previously rejected 1.5 and 2.0
+    weights.
+conditional_launch:
+  candidate_b_must_finish_and_be_evaluated: true
+  candidate_b_must_not_pass_all_gates: true
+  candidate_b_absolute_stoi_gain_must_exceed_candidate_a: true
+  candidate_b_non_stoi_gates_must_all_pass: true
+  candidate_a_absolute_stoi_gain: -0.030359359834984445
+  dns1_external_test_reuse_permitted: false
+control:
+  reference_candidate: v15_quiet_level_identity_seed1200_epoch3
+  only_config_changes:
+    magnitude_ratio_underestimation_weight:
+      from: 1.0
+      to: 1.10
+    experiment_name:
+      from: quiet_level_identity_seed1200
+      to: quiet_identity_mild_under_seed1200
+selection_policy:
+  fixed_training_epoch: 3
+  epoch_reselection_permitted: false
+  initialization_seed: 1200
+  distillation_rng_seed: 1420
+  candidate_order: 3
+  candidate_budget: 4
+training:
+  config: configs/v15/quiet_identity_mild_under_seed1200.yaml
+  config_sha256: ce868ff89630cc503df35a528704c5ba7227d41034a10b711b6b8f3fb085a3e0
+  command: >-
+    PYTHONPATH=src:scripts python scripts/train_distill_v15_identity.py
+    --config configs/v15/quiet_identity_mild_under_seed1200.yaml --device cuda
+  output_directory: checkpoints/v15/preservation/quiet_identity_mild_under_seed1200
+  expected_checkpoint: checkpoints/v15/preservation/quiet_identity_mild_under_seed1200/epoch_003.pt
+  epochs: 3
+  precision: bf16
+  learning_rate: 0.000025
+  batch_size: 4
+  clean_input_probability: 0.10
+  level_augmentation_probability: 0.50
+  magnitude_ratio_underestimation_weight: 1.10
+models:
+  student_initialization:
+    path: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+    sha256: 5216893ac37a2ee0d3fb5b122a071433bf50bdd8917b28d2ee95db62bb385c97
+  privileged_teacher:
+    path: checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt
+    sha256: 98a48ace61f9bcb133c7b0a07a7e119e1d67338600b4572b75b228f60b83f577
+  deployed_architecture: causal_temporal_core_v12
+  deployed_parameters: 808095
+  algorithmic_latency_ms: 20.0
+data:
+  train_metadata:
+    path: data/processed/voicebank_demand/metadata/train.csv
+    sha256: 5cdc898cb997aab244c90cf1cd6229e40e5a193ff6a58f4a21bc88233450defc
+    items: 10235
+  epoch_selection_metadata:
+    path: data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv
+    sha256: 4bf6ecca9c570b89f3ae9b6f75255ca9c81c8eab26175536f172cd4bb248abc2
+    items: 100
+evaluation:
+  cross_domain_protocol: configs/v15/frozen_cross_domain_dev_protocol.yaml
+  voicebank_development: data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv
+  promotion_gates: configs/v15/promotion_gates.yaml
+  reference: v14_2_seed1200_epoch3
+  evaluate_only_epoch: 3
+source_files:
+  scripts/train_distill_v15_identity.py: ffe2962c3e1b2906246905630f235ef8c010b28076353f59719b4bcd7cc6a8c1
+  scripts/train_distill_v15.py: 6659a462e606abbedc143041b94ed85ec54587ca005f615060ae9d38923ef9e1
+  scripts/train_distill.py: 17f059f50ceec4c9fa15b653b970670b5069a4c4f51ebe04d03c596ceeb47756
+  src/cnvqg/data/dataset.py: 6bec3ad129e23e3ccb8e71379c0d07e511b986d5eff493ce846cc9a7376e60d6
+  src/cnvqg/losses/losses.py: a3e98be6e3aa980f8405de8ac6a682afd7c253ca64bd659f5a12231ad0ff2a3c
+  src/cnvqg/training/distillation.py: 57191693f64653b9523ecf99509c082634c85445c4610e6d0542e467c3d525dd
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8

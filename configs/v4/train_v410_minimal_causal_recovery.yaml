@@ -1,0 +1,88 @@
+project: {name: cn-vqg-speech-enhancement, seed: 42}
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val_v5_locked_400.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 6
+  num_workers: 4
+model:
+  architecture: causal_v43_minimal_v410
+  variant: xl
+  sample_rate: 16000
+  n_fft: 512
+  hop_length: 160
+  win_length: 320
+  center: false
+  magnitude_power: 0.3
+  mask_max: 2.0
+  max_iterations: 3
+  use_mamba: true
+  use_noise_codebook: true
+  codebook_size: 16
+  vq_gate_learnable: true
+  vq_gate_initial: 0.01
+  vq_update_codebook: false
+  vq_decay: 0.99
+  condition_dynamics: true
+  adaptive_iterations: true
+  phase_confidence: true
+  noise_segment_frames: 32
+  deployment_vq: false
+loss:
+  waveform_l1_weight: 0.5
+  si_sdr_weight: 0.1
+  stft_weight: 0.5
+  stft_fft_sizes: [256, 512, 1024]
+  stft_hop_sizes: [64, 128, 256]
+  stft_win_lengths: [256, 512, 1024]
+  vq_weight: 0.0
+  mel_weight: 0.2
+  complex_stft_weight: 0.1
+  noise_prediction_weight: 0.0
+  magnitude_weight: 1.0
+  phase_weight: 0.2
+  group_delay_weight: 0.05
+  instantaneous_frequency_weight: 0.05
+  phase_confidence_weight: 0.05
+  phase_confidence_temperature: 1.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 12
+  learning_rate: 0.000025
+  weight_decay: 0.00001
+  grad_clip_norm: 5.0
+  precision: bf16
+  log_every: 25
+  val_every: 1
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  init_checkpoint: checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt
+  init_strict: true
+  optimizer:
+    name: muon
+    muon_learning_rate: 0.001
+    adamw_learning_rate: 0.000025
+    momentum: 0.95
+    nesterov: true
+    ns_steps: 5
+    muon_weight_decay: 0.00001
+  lr_scheduler:
+    name: reduce_on_plateau
+    mode: max
+    metric: perceptual_enhanced_pesq
+    factor: 0.5
+    patience: 2
+    min_lr: 0.000001
+  early_stopping: {enabled: true, patience: 4, min_delta: 0.002}
+  perceptual_validation: {enabled: true, max_items: 100}
+  ema: {enabled: false}
+  metricgan_lite: {enabled: false}
+paths:
+  checkpoint_dir: checkpoints/v410
+  experiment_name: minimal_causal_recovery

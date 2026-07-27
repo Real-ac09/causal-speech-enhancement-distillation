@@ -1,0 +1,106 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 1210
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val_v5_locked_400.csv
+  full_val_metadata: data/processed/voicebank_demand/metadata/val.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 2
+  num_workers: 4
+model:
+  architecture: causal_aux_vq_mamba_v51
+  variant: teacher
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  codebook_size: 32
+  vq_mode: train_only
+  use_mamba: true
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+  magnitude_mode: log_ratio
+  channels: 256
+  noise_dim: 96
+  refinement_passes: 2
+loss:
+  waveform_l1_weight: 0.0
+  si_sdr_weight: 0.005
+  stft_weight: 0.15
+  mel_weight: 0.1
+  complex_stft_weight: 0.0
+  magnitude_weight: 1.0
+  phase_weight: 0.25
+  group_delay_weight: 0.1
+  instantaneous_frequency_weight: 0.1
+  phase_confidence_weight: 0.05
+  waveform_charbonnier_eps: 0.001
+  stft_fft_sizes: [256, 512, 1024]
+  stft_hop_sizes: [64, 128, 256]
+  stft_win_lengths: [256, 512, 1024]
+  stft_spectral_convergence_weight: 1.0
+  stft_log_mag_weight: 1.0
+  stft_mag_l1_weight: 0.0
+  vq_weight: 1.0
+  noise_prediction_weight: 0.05
+  noise_prediction_n_fft: 512
+  noise_prediction_hop_length: 160
+  noise_prediction_win_length: 320
+  complex_stft_fft_sizes: [512]
+  complex_stft_hop_sizes: [160]
+  complex_stft_win_lengths: [320]
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  magnitude_equal_loudness: true
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 40
+  learning_rate: 0.0001
+  weight_decay: 1.0e-05
+  gradient_accumulation_steps: 4
+  grad_clip_norm: 5.0
+  precision: bf16
+  log_every: 100
+  val_every: 1
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: reduce_on_plateau
+    metric: perceptual_enhanced_pesq
+    mode: max
+    factor: 0.5
+    patience: 3
+    min_lr: 1.0e-05
+  early_stopping:
+    enabled: true
+    patience: 8
+    min_delta: 0.003
+  perceptual_validation:
+    enabled: true
+    max_items: 400
+    phase_residual_scale: 0.0
+    magnitude_residual_scale: 0.95
+  checkpoint_safeguards:
+    baseline_summary: results/v51_optimizer_recovery/v51_recovery_main/promoted/baseline_full_val/summary.json
+    max_si_sdr_drop: 0.15
+    max_stoi_drop: 0.002
+    max_estoi_drop: 0.003
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+paths:
+  checkpoint_dir: /home/mohamedb/Documents/cn-vqg-speech-enhancement/checkpoints/v51_optimizer_recovery/v51_recovery_main
+  experiment_name: adamw_loss_rescue_promoted
