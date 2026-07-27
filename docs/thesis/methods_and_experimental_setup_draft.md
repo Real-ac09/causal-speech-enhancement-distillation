@@ -1,14 +1,16 @@
 # Methods and experimental setup draft
 
-> Writing status: implementation-traced draft. Replace provisional chapter,
-> section, table, and equation numbers after integration into the dissertation.
+> Writing status: implementation-traced draft using Coventry University's
+> author-date APA 7th edition referencing convention. Replace provisional
+> chapter, section, table, and equation numbers after integration into the
+> dissertation template, and apply that template's fonts, spacing, margins,
+> pagination, and heading styles. Apply a 1.27 cm hanging indent to every
+> reference-list entry in the final typeset document.
 > The final systems and evaluation procedures described here are frozen in
 > [`configs/v13/frozen_final_protocol.yaml`](../../configs/v13/frozen_final_protocol.yaml),
 > [`configs/v14/frozen_replication_protocol.yaml`](../../configs/v14/frozen_replication_protocol.yaml),
 > and
 > [`configs/v14/frozen_replication_evaluation.yaml`](../../configs/v14/frozen_replication_evaluation.yaml).
-> Add the dissertation's preferred bibliographic citations for the datasets,
-> GRU, AdamW, PESQ, STOI, ESTOI, and SI-SDR where marked during final editing.
 
 ## 1. Experimental objective and design
 
@@ -48,11 +50,13 @@ was frozen.
 ### 2.1 VoiceBank-DEMAND
 
 The main corpus was the paired VoiceBank-DEMAND speech-enhancement dataset
-[CITATION REQUIRED]. Each metadata row associated a noisy waveform with its
-clean reference. Table 1 gives the partitions used by the final programme.
+(Valentini-Botinhao, 2017). Each metadata row associated a noisy waveform with
+its clean reference. Table 1 gives the partitions used by the final programme.
 Durations were calculated from the local processed waveforms.
 
-**Table 1. VoiceBank-DEMAND partitions used in the final experiments.**
+**Table 1**
+
+*VoiceBank-DEMAND Partitions Used in the Final Experiments*
 
 | Partition | Role | Utterances | Speakers | Duration |
 |---|---|---:|---:|---:|
@@ -78,12 +82,12 @@ frozen final systems.
 ### 2.2 External DNS1 evaluation set
 
 Cross-domain generalisation was evaluated on 150 paired utterances from the
-Microsoft DNS Challenge 1 synthetic no-reverberation test condition
-[CITATION REQUIRED]. This material totalled 0.417 h and was acquired from
-source commit `70f19285c36cca4df2338f9248775ddc50980c6b`. It was not used for
-training, development, recipe selection, epoch selection, or checkpoint
-selection, and it had not been evaluated before the V14.2 protocol was frozen.
-The no-reverberation condition was declared as the primary external condition
+Microsoft DNS Challenge 1 synthetic no-reverberation test condition (Reddy et
+al., 2020). This material totalled 0.417 h and was acquired from source commit
+`70f19285c36cca4df2338f9248775ddc50980c6b`. It was not used for training,
+development, recipe selection, epoch selection, or checkpoint selection, and
+it had not been evaluated before the V14.2 protocol was frozen. The
+no-reverberation condition was declared as the primary external condition
 before evaluation.
 
 ### 2.3 Waveform preparation
@@ -187,13 +191,12 @@ contribute to either enhancement or the training objective.
 
 ### 3.3 Temporal core and decoder
 
-The temporal core was a single projected gated recurrent unit (GRU)
-[CITATION REQUIRED]. Each frequency trajectory was treated as a temporal
-sequence. The 232-dimensional input was layer-normalised and passed through a
-single-layer GRU with hidden size 232, followed by a 232-dimensional output
-projection. A residual connection used a learnable layer scale initialised to
-0.1. A second bounded residual scale joined the temporal output to the
-bottleneck.
+The temporal core was a single projected gated recurrent unit (GRU; Cho et al.,
+2014). Each frequency trajectory was treated as a temporal sequence. The
+232-dimensional input was layer-normalised and passed through a single-layer
+GRU with hidden size 232, followed by a 232-dimensional output projection. A
+residual connection used a learnable layer scale initialised to 0.1. A second
+bounded residual scale joined the temporal output to the bottleneck.
 
 The decoder projected the bottleneck from 232 to 116 channels, upsampled along
 frequency using nearest-neighbour interpolation, and concatenated the result
@@ -252,7 +255,7 @@ The waveform term was a Charbonnier penalty with
 
 The SI-SDR term was the negative mean scale-invariant signal-to-distortion
 ratio, calculated after removing the temporal mean from the estimate and
-target [CITATION REQUIRED].
+target (Le Roux et al., 2019).
 
 The compressed-complex STFT term used an STFT with FFT size 512, hop 160, and
 window 320. If
@@ -313,13 +316,13 @@ penalties had zero weight.
 ### 4.2 Optimisation
 
 Three V13 models were trained using seeds 1200, 1201, and 1202. AdamW
-[CITATION REQUIRED] used an initial learning rate of \(10^{-4}\), weight
-decay \(10^{-5}\), and gradient-norm clipping at 1.0. Training used bfloat16,
-batch size 6, and a maximum of 40 epochs. The learning rate was warmed up for
-three epochs and then reduced using cosine decay to 5% of its initial value.
-Early stopping used patience 8 and minimum improvement 0.003. The selected
-checkpoint maximised full-utterance validation PESQ on at most 100 designated
-epoch-selection utterances.
+(Loshchilov & Hutter, 2019) used an initial learning rate of \(10^{-4}\),
+weight decay \(10^{-5}\), and gradient-norm clipping at 1.0. Training used
+bfloat16, batch size 6, and a maximum of 40 epochs. The learning rate was
+warmed up for three epochs and then reduced using cosine decay to 5% of its
+initial value. Early stopping used patience 8 and minimum improvement 0.003.
+The selected checkpoint maximised full-utterance validation PESQ on at most
+100 designated epoch-selection utterances.
 
 ## 5. Privileged-distillation V14.2 training
 
@@ -424,12 +427,12 @@ margin, not quality superiority over Mamba.
 
 ## 7. Evaluation metrics
 
-Quality was evaluated with PESQ wideband at 16 kHz [CITATION REQUIRED],
-SI-SDR [CITATION REQUIRED], STOI [CITATION REQUIRED], and extended STOI
-(ESTOI) [CITATION REQUIRED]. PESQ estimates perceptual speech quality. STOI
-and ESTOI estimate intelligibility, with ESTOI intended to remain informative
-under a wider range of temporal and spectral distortions. SI-SDR measures
-waveform fidelity after allowing a scale projection of the clean reference.
+Quality was evaluated with wideband PESQ at 16 kHz (Rix et al., 2001), SI-SDR
+(Le Roux et al., 2019), STOI (Taal et al., 2011), and extended STOI (ESTOI;
+Jensen & Taal, 2016). PESQ estimates perceptual speech quality. STOI and ESTOI
+estimate intelligibility, with ESTOI intended to remain informative under a
+wider range of temporal and spectral distortions. SI-SDR measures waveform
+fidelity after allowing a scale projection of the clean reference.
 
 For estimate \(\widehat{\mathbf{s}}\) and zero-mean reference
 \(\mathbf{s}\), the implementation computed
@@ -532,3 +535,48 @@ The principal reproducibility artefacts are:
   [`src/cnvqg/metrics/speech_metrics.py`](../../src/cnvqg/metrics/speech_metrics.py)
 - Final Results chapter draft:
   [`docs/thesis/results_chapter_draft.md`](results_chapter_draft.md)
+
+## References
+
+Cho, K., van Merriënboer, B., Gulcehre, C., Bahdanau, D., Bougares, F.,
+Schwenk, H., & Bengio, Y. (2014). Learning phrase representations using RNN
+encoder-decoder for statistical machine translation. In *Proceedings of the
+2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)*
+(pp. 1724–1734). Association for Computational Linguistics.
+https://doi.org/10.3115/v1/D14-1179
+
+Jensen, J., & Taal, C. H. (2016). An algorithm for predicting the
+intelligibility of speech masked by modulated noise maskers. *IEEE/ACM
+Transactions on Audio, Speech, and Language Processing, 24*(11), 2009–2022.
+https://doi.org/10.1109/TASLP.2016.2585871
+
+Le Roux, J., Wisdom, S., Erdogan, H., & Hershey, J. R. (2019). SDR—Half-baked
+or well done? In *ICASSP 2019—2019 IEEE International Conference on Acoustics,
+Speech and Signal Processing (ICASSP)* (pp. 626–630). IEEE.
+https://doi.org/10.1109/ICASSP.2019.8683855
+
+Loshchilov, I., & Hutter, F. (2019). Decoupled weight decay regularization. In
+*International Conference on Learning Representations*.
+https://openreview.net/forum?id=Bkg6RiCqY7
+
+Reddy, C. K. A., Gopal, V., Cutler, R., Beyrami, E., Cheng, R., Dubey, H.,
+Matusevych, S., Aichner, R., Aazami, A., Braun, S., Rana, P., Srinivasan, S.,
+& Gehrke, J. (2020). The INTERSPEECH 2020 deep noise suppression challenge:
+Datasets, subjective testing framework, and challenge results. In *Interspeech
+2020* (pp. 2492–2496). International Speech Communication Association.
+https://doi.org/10.21437/Interspeech.2020-3038
+
+Rix, A. W., Beerends, J. G., Hollier, M. P., & Hekstra, A. P. (2001).
+Perceptual evaluation of speech quality (PESQ)—A new method for speech quality
+assessment of telephone networks and codecs. In *2001 IEEE International
+Conference on Acoustics, Speech, and Signal Processing. Proceedings* (Vol. 2,
+pp. 749–752). IEEE. https://doi.org/10.1109/ICASSP.2001.941023
+
+Taal, C. H., Hendriks, R. C., Heusdens, R., & Jensen, J. (2011). An algorithm
+for intelligibility prediction of time-frequency weighted noisy speech. *IEEE
+Transactions on Audio, Speech, and Language Processing, 19*(7), 2125–2136.
+https://doi.org/10.1109/TASL.2011.2114881
+
+Valentini-Botinhao, C. (2017). *Noisy speech database for training speech
+enhancement algorithms and TTS models* [Data set]. University of Edinburgh.
+https://doi.org/10.7488/ds/2117
