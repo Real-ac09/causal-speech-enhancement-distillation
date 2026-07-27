@@ -1,8 +1,5 @@
-# CN-VQG Speech Enhancement
+# A Sub-Million-Parameter Causal Speech Enhancement Model with GRU Temporal Modelling and Privileged Distillation
 
-Causal Noise-State Vector-Quantised Gating Network for lightweight real-time speech enhancement.
-
-This project investigates a real-time speech enhancement model designed for edge devices such as laptops and phones. The model uses structured noise latent modelling with vector quantisation and a causal decoder for speech denoising.
 
 ## Main Goals
 
