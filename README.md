@@ -1,4 +1,4 @@
-# CN-VQG Speech Enhancement
+# A Sub-Million-Parameter Causal Speech Enhancement Model with GRU Temporal Modelling and Privileged Distillation
 
 Research repository for a lightweight, strictly causal speech-enhancement
 system. The project began with noise-state vector quantisation and Mamba-based
