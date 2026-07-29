@@ -1,0 +1,80 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 9401
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/v89_overfit_1.csv
+  val_metadata: data/processed/voicebank_demand/metadata/v89_overfit_1.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 1
+  num_workers: 0
+  train_random_crop: false
+model:
+  architecture: causal_single_scale_mamba_v92
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  magnitude_mask_maximum: 2.0
+  phase_residual_limit: 0.0
+  use_mamba: true
+  use_frequency_mamba: false
+  use_noise_conditioning: false
+  use_auxiliary_vq: false
+  use_phase_detail: false
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+loss:
+  waveform_l1_weight: 0.0
+  si_sdr_weight: 0.0
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.0
+  noise_prediction_weight: 0.0
+  magnitude_weight: 0.0
+  magnitude_log_weight: 0.0
+  magnitude_ratio_weight: 1.0
+  magnitude_ratio_cap: 1.0
+  magnitude_ratio_loss: l1
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+  noise_spectrum_weight: 0.0
+  phase_confidence_weight: 0.0
+training:
+  epochs: 500
+  learning_rate: 0.0001
+  weight_decay: 1.0e-05
+  grad_clip_norm: 1.0
+  precision: fp32
+  log_every: 25
+  val_every: 25
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: none
+  early_stopping:
+    enabled: false
+  perceptual_validation:
+    enabled: true
+    max_items: 1
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  save_every_epoch: false
+paths:
+  checkpoint_dir: checkpoints/v9_topology
+  experiment_name: v92_student_fp32

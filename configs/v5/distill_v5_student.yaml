@@ -1,0 +1,76 @@
+teacher_checkpoint: checkpoints/v5_teacher_perceptual/best.pt
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val_v5_locked_400.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 1
+  num_workers: 4
+student_model:
+  architecture: causal_aux_vq_mamba_v5
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  codebook_size: 32
+  vq_mode: train_only
+  use_mamba: true
+distillation:
+  spectrum_weight: 0.20
+  feature_weight: 0.15
+  magnitude_mask_weight: 0.05
+  phase_weight: 0.05
+  noise_vq_weight: 0.05
+  temperature: 2.0
+loss:
+  waveform_l1_weight: 0.1
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.1
+  stft_weight: 0.0
+  vq_weight: 1.0
+  mel_weight: 0.0
+  complex_stft_weight: 1.0
+  complex_stft_fft_sizes: [512]
+  complex_stft_hop_sizes: [160]
+  complex_stft_win_lengths: [320]
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.05
+  noise_prediction_n_fft: 512
+  noise_prediction_hop_length: 160
+  noise_prediction_win_length: 320
+  magnitude_weight: 0.5
+  magnitude_equal_loudness: true
+  phase_weight: 0.1
+  group_delay_weight: 0.05
+  instantaneous_frequency_weight: 0.05
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 40
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  grad_clip_norm: 5.0
+  precision: bf16
+  distillation_warmup_epochs: 3
+  checkpoint_metric: supervised
+  optimizer:
+    name: muon
+    muon_learning_rate: 0.001
+    adamw_learning_rate: 0.0001
+    momentum: 0.95
+    nesterov: true
+    ns_steps: 5
+    muon_weight_decay: 0.00001
+  early_stopping: {enabled: true, patience: 8, min_delta: 0.003}
+paths:
+  checkpoint_dir: checkpoints
+  experiment_name: v5_student_distilled

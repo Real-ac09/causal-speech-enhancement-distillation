@@ -10,7 +10,7 @@ import soundfile as sf
 import torch
 
 from cnvqg.data import PairedSpeechDataset
-from cnvqg.models import CNVQGModel
+from cnvqg.models.factory import build_model
 
 
 def parse_args():
@@ -87,11 +87,11 @@ def main():
     args = parse_args()
     device = get_device(args.device)
 
-    checkpoint = torch.load(args.checkpoint, map_location=device)
+    checkpoint = torch.load(args.checkpoint, map_location=device, weights_only=False)
 
     config = checkpoint["config"]
 
-    model = CNVQGModel(**config["model"]).to(device)
+    model = build_model(config["model"]).to(device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
 

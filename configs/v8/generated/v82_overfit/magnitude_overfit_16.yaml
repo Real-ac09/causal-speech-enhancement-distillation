@@ -1,0 +1,104 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 8201
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/v82_overfit_16.csv
+  val_metadata: data/processed/voicebank_demand/metadata/v82_overfit_16.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 2
+  train_random_crop: false
+model:
+  architecture: predictive_noise_vq_mamba_v8
+  variant: teacher
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  channels: 320
+  noise_dim: 96
+  temporal_layers: 2
+  auxiliary_vq: false
+  codebook_size: 32
+  prediction_horizons:
+  - 1
+  - 2
+  - 4
+  vq_commitment_weight: 0.02
+  vq_usage_weight: 0.005
+  prototype_prediction_weight: 0.02
+  use_mamba: true
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+  phase_residual_scale: 0.0
+loss:
+  waveform_l1_weight: 0.0
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.0
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.0
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_win_lengths:
+  - 320
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.0
+  noise_prediction_n_fft: 512
+  noise_prediction_hop_length: 160
+  noise_prediction_win_length: 320
+  magnitude_weight: 1.0
+  magnitude_equal_loudness: false
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+  noise_spectrum_weight: 0.0
+training:
+  epochs: 200
+  learning_rate: 0.0003
+  weight_decay: 1.0e-05
+  gradient_accumulation_steps: 1
+  grad_clip_norm: 5.0
+  precision: bf16
+  log_every: 50
+  val_every: 5
+  checkpoint_metric: loss_magnitude
+  checkpoint_mode: min
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: reduce_on_plateau
+    mode: min
+    metric: loss_magnitude
+    factor: 0.5
+    patience: 3
+    min_lr: 1.0e-05
+  early_stopping:
+    enabled: true
+    patience: 12
+    min_delta: 1.0e-05
+  perceptual_validation:
+    enabled: false
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  save_every_epoch: false
+paths:
+  checkpoint_dir: checkpoints/v82
+  experiment_name: magnitude_overfit_16

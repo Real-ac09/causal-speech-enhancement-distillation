@@ -1,0 +1,64 @@
+version: v17_recipe2
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+amendment:
+  id: v17_recipe2_partial_pesq_instrumentation_2026-07-26
+  amended_at: '2026-07-26'
+  supersedes_protocol_sha256: e2bd2a6b85ce2570c64e9c0643a2cf87036a35e7fe845672c8072ff3e1803694
+  reason: >-
+    Calibration local-window PESQ was partially available across strength
+    candidates before controller training. Exclude PESQ for the entire
+    affected window, renormalise the frozen remaining metric weights, and
+    preserve the completed training labels because no training window
+    encountered partial availability.
+  development_set_used: false
+  external_test_used: false
+hypothesis: >-
+  Recipe 1 failed because one four-second oracle target aliases changing
+  acoustic conditions and permits the dominant full-strength class to absorb
+  the controller. Overlapping two-second targets should increase locally
+  identifiable variation while retaining causal, constant-work inference.
+controlled_change_from_recipe1:
+  changed:
+    - target_scope_from_four_second_utterance_to_two_second_window
+    - one_second_window_stride
+    - fresh_causal_state_for_each_training_window
+  retained:
+    - v17_ordinal_controller_architecture
+    - frozen_candidate_a_backbone
+    - true_waveform_residual_blend
+    - five_level_strength_grid
+    - pareto_safety_policy
+    - valid_speech_frame_mask
+    - balanced_domain_and_class_sampling
+    - classification_only_controller_objective
+    - eight_training_epochs
+    - recipe1_learnability_thresholds
+data:
+  parent_training_items: 1440
+  parent_calibration_items: 260
+  window_seconds: 2.0
+  stride_seconds: 1.0
+  minimum_valid_audio_seconds: 1.0
+  external_test_used: false
+  development_set_used: false
+oracle:
+  policy: configs/v17/local_oracle_policy.yaml
+  backbone: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  state_reset_at_window_start: true
+  score_only_valid_unpadded_prefix: true
+training:
+  seed: 17041
+  epochs: 8
+  checkpoint_every_epoch: true
+  broad_development_evaluation_before_learnability_gate: false
+learnability_gate:
+  dns_target_correlation_minimum: 0.30
+  macro_nearest_grid_accuracy_minimum: 0.35
+  dns_target_mae_maximum: 0.20
+  predicted_target_means_monotonic_tolerance: 0.02
+  target_one_minus_zero_mean_minimum: 0.30
+  voice_target_mae_maximum: 0.10
+decision:
+  pass: advance_selected_epoch_to_frozen_development_benchmarks
+  fail: stop_recipe2_and_reassess_controller_features_or_target_policy

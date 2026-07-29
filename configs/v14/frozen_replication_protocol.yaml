@@ -1,0 +1,64 @@
+protocol_id: v14_2_fixed_recipe_replication_2026-07-25
+status: frozen
+frozen_at: '2026-07-25'
+purpose: >-
+  Replicate the promoted V14.2 privileged-distillation recipe from base-model
+  seeds 1201 and 1202 without further architecture, loss, recipe, epoch, or
+  checkpoint selection.
+selection_policy:
+  recipe_source: configs/v14/generated/distillation/mag_005.yaml
+  recipe_source_sha256: 776a24265f2a14d9cdf19cd7896861d3fe57af2db4317989f9d2f0799a402d75
+  fixed_epoch: 3
+  maximum_train_batches_per_epoch: 600
+  early_stopping: false
+  standard_test_permitted_during_training: false
+  development_metrics_permitted_for_reselection: false
+  checkpoint_policy: use_epoch_003_for_every_seed_regardless_of_validation_loss
+reference_seed:
+  base_seed: 1200
+  distillation_rng_seed: 1420
+  checkpoint: checkpoints/v14/distillation/mag_005/epoch_003.pt
+  checkpoint_sha256: 0b58d6def618cc67db7b14848c406015f76b25c247757d797120ff3a2801f891
+replications:
+  - base_seed: 1201
+    distillation_rng_seed: 1421
+    config: configs/v14/distill_replication_seed1201.yaml
+    config_sha256: 54cc083ce14497596a5b754c79dc9030a5f7e0bd94d579491ef0c9c1e441d8f1
+    init_checkpoint: checkpoints/v12/full/gru_matched_time1_seed1201/best.pt
+    init_checkpoint_sha256: 7c2cb1e5d0dac71c5a80a78e9c00c9f4b83e8ed2df050e29e8ca5253ac94370b
+    output_checkpoint: checkpoints/v14/distillation/mag_005_seed1201_fixed_epoch3/epoch_003.pt
+  - base_seed: 1202
+    distillation_rng_seed: 1422
+    config: configs/v14/distill_replication_seed1202.yaml
+    config_sha256: 4b0b26fc5c32a050ef23979ae482adac128535e546b42958cb73f33eccac52d1
+    init_checkpoint: checkpoints/v12/full/gru_matched_time1_seed1202/best.pt
+    init_checkpoint_sha256: 34f3456bc7a1f7a111b75ce2e1a836eafd5c86eaded7ce95b34b8ceba009665e
+    output_checkpoint: checkpoints/v14/distillation/mag_005_seed1202_fixed_epoch3/epoch_003.pt
+teacher:
+  checkpoint: checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt
+  checkpoint_sha256: 98a48ace61f9bcb133c7b0a07a7e119e1d67338600b4572b75b228f60b83f577
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  train_metadata_sha256: 5cdc898cb997aab244c90cf1cd6229e40e5a193ff6a58f4a21bc88233450defc
+  validation_metadata: data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv
+  validation_metadata_sha256: 4bf6ecca9c570b89f3ae9b6f75255ca9c81c8eab26175536f172cd4bb248abc2
+  role: >-
+    Validation loss is logged only as a training diagnostic. It cannot alter
+    the fixed three-epoch schedule or selected checkpoint.
+source_files:
+  scripts/train_distill.py: 17f059f50ceec4c9fa15b653b970670b5069a4c4f51ebe04d03c596ceeb47756
+  src/cnvqg/data/dataset.py: 6bec3ad129e23e3ccb8e71379c0d07e511b986d5eff493ce846cc9a7376e60d6
+  src/cnvqg/losses/losses.py: a3e98be6e3aa980f8405de8ac6a682afd7c253ca64bd659f5a12231ad0ff2a3c
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8
+  src/cnvqg/optimizers.py: e2db2f135bc26029bfac4debf9b00b7b9d79e5b72b52f3440d9f09b4476bbfe9
+  src/cnvqg/training/distillation.py: 57191693f64653b9523ecf99509c082634c85445c4610e6d0542e467c3d525dd
+external_holdout:
+  status: unavailable
+  finding: >-
+    No corpus external to VoiceBank+DEMAND is present in the workspace.
+    Internal speaker splitting is not an external-generalisation test.
+  policy: >-
+    Select and freeze an independently sourced paired corpus before evaluating
+    any V14 checkpoint on it.

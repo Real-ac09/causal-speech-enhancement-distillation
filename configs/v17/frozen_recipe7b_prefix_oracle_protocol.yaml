@@ -1,0 +1,28 @@
+version: v17_recipe7b_prefix_oracles
+status: frozen_before_acquisition
+frozen_at: '2026-07-26'
+role: privileged_training_target_acquisition
+hypothesis: >-
+  Explicit quality targets computed from the first one-second causal prefix
+  will remove the remaining mismatch between observable evidence and
+  Recipe-5 full-window labels.
+prefix:
+  duration_seconds: 1.0
+  state_reset_at_window_start: true
+  supervision_application: hold_prefix_target_after_50_percent_burn_in
+strength_grid: [0.0, 0.25, 0.5, 0.75, 1.0]
+retained_policy: configs/v17/local_oracle_policy.yaml
+sources:
+  train: results/v17/recipe2_local_oracles/train/metadata.csv
+  calibration: results/v17/recipe2_local_oracles/calibration/metadata.csv
+outputs:
+  train: results/v17/recipe7_prefix_oracles/train
+  calibration: results/v17/recipe7_prefix_oracles/calibration
+  prepared_metadata: data/processed/v17_recipe7
+restrictions:
+  development_set_used: false
+  external_test_used: false
+  original_full_window_evaluation_labels_modified: false
+decision:
+  acquisition_success: freeze_and_train_recipe7b
+  acquisition_failure: stop_and_audit_prefix_metric_availability

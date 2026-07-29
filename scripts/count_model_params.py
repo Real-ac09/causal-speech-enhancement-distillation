@@ -6,7 +6,7 @@ from pathlib import Path
 import torch
 import yaml
 
-from cnvqg.models import CNVQGModel
+from cnvqg.models.factory import build_model
 
 
 def main() -> None:
@@ -16,7 +16,7 @@ def main() -> None:
 
     cfg = yaml.safe_load(Path(args.config).read_text())
 
-    model = CNVQGModel(**cfg["model"])
+    model = build_model(cfg["model"])
 
     total = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)

@@ -49,3 +49,8 @@ cloudpickle
 ml-dtypes
 z3-solver
 torch-c-dlpack-ext
+
+# V5 deployment validation.
+onnx>=1.16
+onnxruntime>=1.18
+pytest>=8.0

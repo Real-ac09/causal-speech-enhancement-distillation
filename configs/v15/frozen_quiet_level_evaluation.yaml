@@ -1,0 +1,56 @@
+protocol_id: v15_quiet_level_seed1200_evaluation_2026-07-25
+status: frozen_before_candidate_evaluation
+frozen_at: '2026-07-25'
+candidate:
+  label: v15_quiet_level_seed1200_epoch3
+  checkpoint: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  checkpoint_sha256: 5978d1ae47d7076c0ce857e1d4d0287e787753f81f69068247d9ed571443c3c8
+  epoch: 3
+  training_protocol: configs/v15/frozen_quiet_level_seed1200_protocol.yaml
+  training_protocol_sha256: 683ed46f8c2c53dab9735a100baa7402008a03cbf9fac54feff340a1b0c02743
+reference:
+  label: v14_2_seed1200_epoch3
+  checkpoint: checkpoints/v14/distillation/mag_005/epoch_003.pt
+  deployed_graph_identical_to_candidate: true
+datasets:
+  cross_domain:
+    metadata: data/processed/dns_cross_domain_dev/metadata.csv
+    metadata_sha256: 5fa4e3613c86daa797176e13c9296ccf7e293bd920d0678db5a26679ebb772e9
+    items: 60
+    role: development
+    reference_summary: results/v15/cross_domain_dev/baselines_seed1200/v14_2/summary.json
+    reference_summary_sha256: 03b67f1a393388020a7000ac6ebac080a2c9b6cbb7ed9a5b52c7fd98a281f49e
+    reference_per_file: results/v15/cross_domain_dev/baselines_seed1200/v14_2/per_file_metrics.csv
+    reference_per_file_sha256: 325797a4e0d9d4b0e7954c14e22747eed990ba9c3f8498ed755240b39dc4745c
+  voicebank:
+    metadata: data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv
+    metadata_sha256: 84223a4ca063f5794d43bcbfe3360b0f2fdb8b1f7d6721b040c90edea49c10af
+    items: 400
+    role: development
+    reference_summary: results/v14/distillation/winner_dev400/summary.json
+    reference_summary_sha256: 8b91240ee22d2feaa0608aa9a06a93431c45b46cecd3934bb6206a338bd80281
+    reference_per_file: results/v14/distillation/winner_dev400/per_file_metrics.csv
+    reference_per_file_sha256: da8fae618a522441957b7b76f4c21781eaf3ea5d2c1c8cd5111024dcf6bdb664
+evaluation:
+  device: cuda
+  weights: model
+  full_utterance: true
+  bootstrap_samples: 20000
+  comparison_seeds:
+    cross_domain: 15012
+    voicebank: 15013
+    final_gate: 15014
+  output_root: results/v15/preservation/quiet_level_seed1200
+  external_test_use_permitted: false
+promotion_gates:
+  path: configs/v15/promotion_gates.yaml
+  sha256: ddad0a8e9e92fca7c7029bc50c53d1567eaaf7602b7a873514b5548d29863488
+deployment_reference:
+  path: results/runtime/v14_2_distilled_seed1200_cpu.json
+  sha256: 3a77952210b35c8dd90321188ad7174cda7d83f7449024d40ce49242d7336659
+  reuse_reason: candidate and reference have identical deployed graphs
+source_files:
+  scripts/run_v15_quiet_level_evaluation.sh: 1bb70d119aaefbca3294d69ac646981283a5d4272b62f36d0a6a1207d19e737c
+  scripts/gate_v15_quiet_level.py: 2eb25952c5cd66ce8674034474a5516042f0fca7a337d29cd03076ba624c1c21
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/compare_evaluations.py: 23342cb09f0b56fac932347b373d25ea9c02234d8abe17797b85892ef5d587b2

@@ -1,0 +1,63 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 42
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 8
+  num_workers: 4
+model:
+  architecture: streaming_hybrid_v2
+  variant: tiny
+  sample_rate: 16000
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  use_mamba: true
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+  vq_update_interval: 2
+  vq_commitment_weight: 0.25
+  vq_decay: 0.99
+  residual_scale: 0.2
+  gain_scale: 0.2
+  phase_scale: 0.08
+  predict_phase: true
+loss:
+  waveform_l1_weight: 1.0
+  si_sdr_weight: 0.3
+  stft_weight: 1.0
+  vq_weight: 0.1
+  mel_weight: 0.15
+  complex_stft_weight: 0.1
+  noise_prediction_weight: 0.1
+training:
+  epochs: 40
+  learning_rate: 0.0002
+  weight_decay: 0.00001
+  grad_clip_norm: 2.0
+  mixed_precision: true
+  log_every: 25
+  val_every: 1
+  max_train_batches: null
+  max_val_batches: null
+  lr_scheduler:
+    name: reduce_on_plateau
+    factor: 0.5
+    patience: 3
+    min_lr: 0.000001
+  early_stopping:
+    enabled: true
+    patience: 7
+    min_delta: 0.0001
+  ema:
+    enabled: false
+    decay: 0.999
+  metricgan_lite:
+    enabled: false
+paths:
+  checkpoint_dir: checkpoints
+  experiment_name: streaming_hybrid_v2_tiny

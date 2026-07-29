@@ -1,0 +1,55 @@
+protocol_id: v15_guarded_overnight_b_to_conditional_c_2026-07-26
+status: frozen_before_overnight_execution
+frozen_at: '2026-07-26'
+purpose: >-
+  Finish candidate B, evaluate it on the frozen development protocols, and
+  launch candidate C only when B improves candidate A's absolute cross-domain
+  STOI while failing no gates outside the four predeclared absolute-STOI
+  safeguards.
+workflow:
+  - wait_for_candidate_b_fixed_epoch_3
+  - evaluate_candidate_b_cross_domain_dev_and_voicebank_dev400
+  - apply_all_17_promotion_gates
+  - conditionally_train_candidate_c_fixed_epoch_3
+  - evaluate_candidate_c_on_the_same_frozen_development_sets
+  - write_machine_readable_final_decision
+guard:
+  dns1_external_test_reuse_permitted: false
+  candidate_b_service: cnvqg-v15-quiet-level-identity-seed1200.service
+  candidate_b_checkpoint: checkpoints/v15/preservation/quiet_level_identity_seed1200/epoch_003.pt
+  candidate_c_checkpoint: checkpoints/v15/preservation/quiet_identity_mild_under_seed1200/epoch_003.pt
+  candidate_a_absolute_stoi_gain: -0.030359359834984445
+  candidate_c_allowed_failures_before_launch:
+    - cross_candidate_minus_noisy_stoi_mean
+    - cross_stoi_harm_rate
+    - cross_quietest_stoi_gain_mean
+    - cross_quietest_stoi_harm_rate
+  candidate_c_requires_candidate_b_stoi_improvement_over_a: true
+  candidate_c_requires_all_other_gates_to_pass: true
+  candidate_c_skipped_if_candidate_b_passes_all_gates: true
+frozen_inputs:
+  configs/v15/quiet_level_identity_seed1200.yaml: 3821bf7b79204434fa0d79f067ba1f2283b8f8b0182e577f30d175b9c17774fd
+  configs/v15/frozen_quiet_level_identity_seed1200_protocol.yaml: 90f39d30289560bc3b49183bdc29ecf5ab91c27628daeeabe34b01a06a5a5fa2
+  configs/v15/quiet_identity_mild_under_seed1200.yaml: ce868ff89630cc503df35a528704c5ba7227d41034a10b711b6b8f3fb085a3e0
+  configs/v15/frozen_quiet_identity_mild_under_seed1200_protocol.yaml: 5c998bac774769fce98525d22c331e3b406aba841473525e113e854d414cdef5
+  configs/v15/frozen_cross_domain_dev_protocol.yaml: a3eafb1073b4767cf2d7219e53f42ad40f977266d26b3663b2cad33ee376406b
+  configs/v15/promotion_gates.yaml: ddad0a8e9e92fca7c7029bc50c53d1567eaaf7602b7a873514b5548d29863488
+  results/v15/preservation/quiet_level_seed1200/gate/gate_report.json: 27b89f40960a03ed609ce18c9971e5acfc87218ee43f94d28ee3eb8ad20f130a
+  checkpoints/v12/full/gru_matched_time1_seed1200/best.pt: 5216893ac37a2ee0d3fb5b122a071433bf50bdd8917b28d2ee95db62bb385c97
+  checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt: 98a48ace61f9bcb133c7b0a07a7e119e1d67338600b4572b75b228f60b83f577
+  data/processed/voicebank_demand/metadata/train.csv: 5cdc898cb997aab244c90cf1cd6229e40e5a193ff6a58f4a21bc88233450defc
+  data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv: 4bf6ecca9c570b89f3ae9b6f75255ca9c81c8eab26175536f172cd4bb248abc2
+  data/processed/dns_cross_domain_dev/metadata.csv: 5fa4e3613c86daa797176e13c9296ccf7e293bd920d0678db5a26679ebb772e9
+  data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv: 84223a4ca063f5794d43bcbfe3360b0f2fdb8b1f7d6721b040c90edea49c10af
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/summary.json: 03b67f1a393388020a7000ac6ebac080a2c9b6cbb7ed9a5b52c7fd98a281f49e
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/per_file_metrics.csv: 325797a4e0d9d4b0e7954c14e22747eed990ba9c3f8498ed755240b39dc4745c
+  results/v14/distillation/winner_dev400/summary.json: 8b91240ee22d2feaa0608aa9a06a93431c45b46cecd3934bb6206a338bd80281
+  results/v14/distillation/winner_dev400/per_file_metrics.csv: da8fae618a522441957b7b76f4c21781eaf3ea5d2c1c8cd5111024dcf6bdb664
+source_files:
+  scripts/run_v15_overnight.py: a79dae48349b5c4706207d91b20864cf4db42d6c5d9cfdf935c9ded2b77fd0ea
+  scripts/run_v15_candidate_evaluation.py: 592d4b7dd37f182ab429c3f91c89be7080b001bccc7a1d71a208735f380389a3
+  scripts/gate_v15_candidate.py: a6fb50183e8762ac4bb1a20a3969d3de45ae0930edf317eb826d1439065244de
+  scripts/gate_v15_quiet_level.py: 2eb25952c5cd66ce8674034474a5516042f0fca7a337d29cd03076ba624c1c21
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/compare_evaluations.py: 23342cb09f0b56fac932347b373d25ea9c02234d8abe17797b85892ef5d587b2
+  scripts/train_distill_v15_identity.py: ffe2962c3e1b2906246905630f235ef8c010b28076353f59719b4bcd7cc6a8c1

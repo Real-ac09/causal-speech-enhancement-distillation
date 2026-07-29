@@ -1,0 +1,72 @@
+version: v17_recipe5
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  A hard oracle-strength class discards the quality and safety structure of
+  the five-candidate sweep. Multi-task prediction of utility, feasibility,
+  constraint violation, and metric deltas should preserve Recipe-4 PESQ gains
+  while reducing avoidable SI-SDR, STOI, and ESTOI regressions.
+controlled_changes_from_recipe4:
+  retained:
+    - two_second_overlapping_local_windows
+    - twelve_clean_reference_free_causal_features
+    - hidden_dimension_16
+    - frozen_candidate_a_backbone
+    - true_waveform_residual_blend
+    - eight_epochs
+    - calibration_only_model_selection
+  changed:
+    - hard_ordinal_strength_supervision_to_soft_lexicographic_policy
+    - scalar_ordinal_head_to_utility_safety_metric_heads
+    - class_balanced_sampler_to_uniform_window_sampling
+targets:
+  source:
+    train: results/v17/recipe2_local_oracles/train/strength_candidates.csv
+    calibration: results/v17/recipe2_local_oracles/calibration/strength_candidates.csv
+  prepared:
+    train: data/processed/v17_recipe5/train.csv
+    calibration: data/processed/v17_recipe5/calibration.csv
+  strength_grid:
+    - 0.0
+    - 0.25
+    - 0.5
+    - 0.75
+    - 1.0
+  metric_order:
+    - pesq
+    - si_sdr
+    - stoi
+    - estoi
+  feasible_softmax_temperature: 0.25
+  fallback_violation_temperature: 0.25
+  fallback_utility_weight: 0.01
+  clean_reference_role: privileged_training_targets_only
+runtime:
+  causal: true
+  future_context: false
+  native_constant_work_required: true
+  controller_parameter_cap: 10000
+training:
+  config: configs/v17/utility_safety_recipe5_seed17044.yaml
+  seed: 17044
+  epochs: 8
+  development_set_used: false
+  external_test_used: false
+selection_gate:
+  top1_accuracy_minimum: 0.45
+  macro_accuracy_minimum: 0.35
+  avoidable_violation_rate_maximum: 0.20
+  mean_constraint_violation_maximum: 1.50
+  mean_utility_minimum: 2.50
+  mean_pesq_delta_minimum: 0.33
+  si_sdr_violation_rate_maximum: 0.10
+  stoi_violation_rate_maximum: 0.18
+  estoi_violation_rate_maximum: 0.11
+reference_recipe4:
+  avoidable_violation_rate: 0.23861566484517305
+  mean_constraint_violation: 1.8151758937337863
+  mean_utility: 2.4477544694358797
+  mean_pesq_delta: 0.3455879087537948
+decision:
+  pass: advance_recipe5_to_frozen_development_benchmarks
+  fail: stop_recipe5_and_reassess_quality_proxy_features

@@ -1,0 +1,110 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 1200
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 6
+  num_workers: 8
+  train_random_crop: true
+model:
+  architecture: causal_temporal_core_v12
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  auxiliary_vq: false
+  codebook_size: 32
+  prediction_horizons:
+  - 1
+  - 2
+  - 4
+  vq_commitment_weight: 0.02
+  vq_usage_weight: 0.005
+  prototype_prediction_weight: 0.02
+  use_mamba: false
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+  phase_residual_scale: 0.0
+  reconstruction_mode: direct_scalar_mask
+  scale_preserving_detail: false
+  temporal_core: gru
+  temporal_hidden_dim: 232
+  time_kernel_size: 1
+loss:
+  waveform_l1_weight: 0.05
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.01
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.5
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_win_lengths:
+  - 320
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.0
+  noise_prediction_n_fft: 512
+  noise_prediction_hop_length: 160
+  noise_prediction_win_length: 320
+  noise_spectrum_weight: 0.0
+  magnitude_weight: 0.0
+  magnitude_log_weight: 0.25
+  magnitude_ratio_weight: 1.0
+  magnitude_ratio_cap: 1.0
+  magnitude_ratio_loss: l1
+  magnitude_ratio_charbonnier_eps: 0.001
+  magnitude_equal_loudness: false
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 40
+  learning_rate: 0.0001
+  weight_decay: 1.0e-05
+  gradient_accumulation_steps: 1
+  grad_clip_norm: 1.0
+  precision: bf16
+  log_every: 50
+  val_every: 1
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  optimizer:
+    name: adamw
+  lr_scheduler:
+    name: warmup_cosine
+    warmup_epochs: 3
+    minimum_factor: 0.05
+  early_stopping:
+    enabled: true
+    patience: 8
+    min_delta: 0.003
+  perceptual_validation:
+    enabled: true
+    max_items: 100
+    whole_utterance: true
+  ema:
+    enabled: false
+  metricgan_lite:
+    enabled: false
+  save_every_epoch: false
+paths:
+  checkpoint_dir: checkpoints/v12/full
+  experiment_name: gru_matched_time1_seed1200

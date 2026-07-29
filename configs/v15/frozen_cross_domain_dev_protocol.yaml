@@ -1,0 +1,81 @@
+protocol_id: v15_cross_domain_development_baselines_2026-07-25
+status: frozen
+frozen_at: '2026-07-25'
+purpose: >-
+  Establish CPU-only V13 and V14.2 baselines on a deterministic DNS
+  training-derived development set before V15 recipe selection.
+claim_policy:
+  role: development_and_promotion_screening
+  external_test_claim_permitted: false
+  dns1_no_reverb_test_used_for_model_selection: false
+  standard_test_used_for_model_selection: false
+  baseline_checkpoint_reselection_permitted: false
+dataset:
+  description: >-
+    Sixty deterministic ten-second mixtures from distinct DNS1 training clean
+    readers and noise assets, balanced across five SNRs and four clean levels.
+  source_repository: https://github.com/microsoft/DNS-Challenge.git
+  source_branch: interspeech2020/master
+  source_commit: 70f19285c36cca4df2338f9248775ddc50980c6b
+  asset_selection: configs/v15/dns_cross_domain_dev_assets.json
+  asset_selection_sha256: 6430e9fc098fee13a01e693a44c1cd5d2aaf748f7f4afcb9e27f8b46ca9c4d02
+  metadata: data/processed/dns_cross_domain_dev/metadata.csv
+  metadata_sha256: 5fa4e3613c86daa797176e13c9296ccf7e293bd920d0678db5a26679ebb772e9
+  manifest: data/processed/dns_cross_domain_dev/manifest.json
+  manifest_sha256: 5be60900aaa22158e217292b94103d766b6ae25630b31b89d5e3b533b2af5b46
+  audio_root: data/processed/dns_cross_domain_dev/audio
+  items: 60
+  duration_seconds_per_item: 10.0
+  unique_clean_readers: 60
+  unique_noise_assets: 60
+  exact_dns1_test_hash_overlap: 0
+  target_snr_db:
+    - -5.0
+    - 0.0
+    - 5.0
+    - 10.0
+    - 15.0
+  target_clean_rms_dbfs:
+    - -35.0
+    - -30.0
+    - -25.0
+    - -20.0
+models:
+  v13:
+    label: CN-VQG-GRU-T1
+    training_seed: 1200
+    checkpoint: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+    checkpoint_sha256: 5216893ac37a2ee0d3fb5b122a071433bf50bdd8917b28d2ee95db62bb385c97
+  v14_2:
+    label: CN-VQG-GRU-T1-PD
+    training_seed: 1200
+    fixed_epoch: 3
+    checkpoint: checkpoints/v14/distillation/mag_005/epoch_003.pt
+    checkpoint_sha256: 0b58d6def618cc67db7b14848c406015f76b25c247757d797120ff3a2801f891
+model:
+  architecture: causal_temporal_core_v12
+  parameter_count: 808095
+  algorithmic_latency_ms: 20.0
+  deployment_teacher_required: false
+evaluation:
+  device: cpu
+  weights: model
+  full_utterance: true
+  output_root: results/v15/cross_domain_dev/baselines_seed1200
+  bootstrap_method: paired_file
+  bootstrap_samples: 20000
+  comparison_seed: 15002
+  analysis_seed: 15003
+promotion_gates:
+  path: configs/v15/promotion_gates.yaml
+  sha256: ddad0a8e9e92fca7c7029bc50c53d1567eaaf7602b7a873514b5548d29863488
+  frozen_before_baseline_evaluation: true
+source_files:
+  scripts/run_v15_cross_domain_baselines.py: e2e584a1d7c5a479a333d85ccb5c50b14839405e446b340ebb377675130997e6
+  scripts/analyze_v15_cross_domain_dev.py: bbab189e56d29f7f1ea4afaf60a4f58b217ca543f74f707026207ea76edde82a
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/compare_evaluations.py: 23342cb09f0b56fac932347b373d25ea9c02234d8abe17797b85892ef5d587b2
+  src/cnvqg/metrics/speech_metrics.py: 5ecd6e6a3de3796adeb509a63d3597f0c90509a1cc246f59ee4cc5caefbc4eee
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/models/predictive_noise_vq_mamba_v8.py: 239f0f90104fa481e178f894c109509c6d4f848cb984ceec398810af6bcf05dd
+  src/cnvqg/models/complex_cnvqg_model.py: c3ac589bbbd173967df11d1d75e3575a3c80b6443c62c3b1c27222f7168872c8

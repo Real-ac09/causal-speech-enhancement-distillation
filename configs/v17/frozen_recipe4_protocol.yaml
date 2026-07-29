@@ -1,0 +1,57 @@
+version: v17_recipe4
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe 3 improved calibration but remained range-compressed because its
+  controller inputs did not explicitly expose enhancement aggressiveness or
+  local speech/noise evidence. Frame-local causal features derived from the
+  frozen backbone should make oracle strength more identifiable without
+  increasing temporal capacity.
+controlled_changes_from_recipe3:
+  retained:
+    - audited_recipe2_local_oracle_labels
+    - cumulative_ordinal_controller
+    - recipe3_loss_weights
+    - hidden_dimension_16
+    - frozen_candidate_a_backbone
+    - true_waveform_residual_blend
+    - balanced_sampler_and_speech_mask
+    - eight_epochs
+    - unchanged_learnability_gate
+  changed:
+    - summary_features_from_4_to_12
+feature_names:
+  - log_rms
+  - spectral_flatness
+  - high_band_ratio
+  - spectral_flux
+  - low_band_ratio
+  - mid_band_ratio
+  - spectral_centroid
+  - base_mask_mean
+  - base_mask_std
+  - heavy_attenuation_fraction
+  - estimated_snr
+  - estimated_noise_fraction
+feature_constraints:
+  clean_reference_used: false
+  frame_local_except_one_frame_causal_flux: true
+  future_context_used: false
+  native_constant_work_implemented: true
+  controller_parameter_cap: 10000
+training:
+  config: configs/v17/feature_recipe4_seed17043.yaml
+  seed: 17043
+  epochs: 8
+  development_set_used: false
+  external_test_used: false
+learnability_gate:
+  dns_target_correlation_minimum: 0.30
+  macro_nearest_grid_accuracy_minimum: 0.35
+  dns_target_mae_maximum: 0.20
+  predicted_target_means_monotonic_tolerance: 0.02
+  target_one_minus_zero_mean_minimum: 0.30
+  voice_target_mae_maximum: 0.10
+decision:
+  pass: advance_selected_epoch_to_frozen_development_benchmarks
+  fail: stop_recipe4_and_reassess_oracle_predictability

@@ -1,0 +1,20 @@
+model,parameters_m,causality,latency_ms,training_data,pesq_loss,pesq,stoi,estoi,si_sdr_db,macs_g_per_s,comparison_class,source
+GTCRN,0.024,causal,NR,VoiceBank+DEMAND,no,2.87,0.940,0.848,18.8,0.033,streaming,https://arxiv.org/abs/2509.21867
+AdaptCRN,0.135,causal,NR,VoiceBank+DEMAND,no,2.98,NR,NR,NR,NR,streaming,https://arxiv.org/abs/2509.21867
+FastEnhancer-M,0.492,causal,NR,VoiceBank+DEMAND,no,3.24,NR,NR,NR,NR,streaming,https://arxiv.org/abs/2509.21867
+aTENNuate,0.84,causal,NR,VoiceBank+DEMAND plus external data,no,3.27,NR,NR,NR,NR,causal raw waveform,https://arxiv.org/abs/2409.03377
+Current V4.3,1.147,offline,NR,VoiceBank+DEMAND,no,2.871,NR,NR,NR,NR,current reference,results/metrics/v43_gate_ablation/no_vq
+CN-VQG-GRU-T1-PD,0.808,causal,20,VoiceBank+DEMAND,no,2.618,0.937,0.841,18.20,NR,proposed streaming,results/v14/replication_evaluation/standard/v14_2_aggregate.json
+SEMamba-Uni,1.41,causal,NR,VoiceBank+DEMAND,no,3.29,NR,NR,NR,NR,unidirectional,https://arxiv.org/abs/2405.06573
+DPT-FSNet,0.88,offline,NR,VoiceBank+DEMAND,no,3.33,NR,NR,NR,NR,offline,https://arxiv.org/abs/2104.13002
+TridentSE-S,1.00,offline,NR,VoiceBank+DEMAND,no,3.36,NR,NR,NR,NR,offline,https://www.isca-archive.org/interspeech_2023/yin23_interspeech.html
+TridentSE-M,1.42,offline,NR,VoiceBank+DEMAND,no,3.44,NR,NR,NR,NR,offline,https://www.isca-archive.org/interspeech_2023/yin23_interspeech.html
+CMGAN,1.83,offline,NR,VoiceBank+DEMAND,yes,3.41,NR,NR,NR,NR,offline MetricGAN,https://arxiv.org/abs/2209.11112
+MP-SENet,2.05,offline,NR,VoiceBank+DEMAND,no,3.50,NR,NR,NR,NR,offline,https://arxiv.org/abs/2305.13686
+SEMamba-Bi,2.25,offline,NR,VoiceBank+DEMAND,no,3.52,NR,NR,NR,NR,bidirectional,https://arxiv.org/abs/2405.06573
+SEMamba-consistency,2.25,offline,NR,VoiceBank+DEMAND,no,3.55,NR,NR,NR,NR,offline consistency,https://arxiv.org/abs/2405.06573
+DB-AIAT,2.81,offline,NR,VoiceBank+DEMAND,no,3.31,NR,NR,NR,NR,offline,https://arxiv.org/abs/2110.06467
+TridentSE-L,3.03,offline,NR,VoiceBank+DEMAND,no,3.47,NR,NR,NR,NR,offline,https://www.isca-archive.org/interspeech_2023/yin23_interspeech.html
+SEMamba-PCS,2.25,offline,NR,VoiceBank+DEMAND,no,3.69,NR,NR,NR,NR,offline PESQ-oriented,https://arxiv.org/abs/2405.06573
+V5 Student,1.041,causal,20,VoiceBank+DEMAND,no,NR,NR,NR,NR,NR,proposed streaming,this repository
+V5 Teacher,2.629,causal,20,VoiceBank+DEMAND,no,NR,NR,NR,NR,NR,proposed streaming,this repository

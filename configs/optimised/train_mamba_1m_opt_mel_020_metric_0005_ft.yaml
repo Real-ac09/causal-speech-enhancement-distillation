@@ -1,0 +1,73 @@
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 42
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 2
+model:
+  encoder_channels: 64
+  latent_dim: 128
+  speech_dim: 128
+  noise_dim: 64
+  codebook_size: 256
+  temporal_hidden_dim: 128
+  temporal_layers: 4
+  use_mamba: true
+  use_residual: true
+  use_vq: true
+  use_noise_conditioning: true
+  use_temporal: true
+  residual_scale_init: 0.2
+  learn_residual_scale: false
+loss:
+  waveform_l1_weight: 1.0
+  si_sdr_weight: 0.5
+  stft_weight: 1.0
+  vq_weight: 0.25
+  mel_weight: 0.2
+  mel_sample_rate: 16000
+  mel_n_fft: 512
+  mel_hop_length: 160
+  mel_win_length: 400
+  mel_n_mels: 80
+  mel_f_min: 50.0
+  mel_f_max: 7600.0
+training:
+  epochs: 8
+  learning_rate: 1.0e-05
+  weight_decay: 1.0e-05
+  grad_clip_norm: 5.0
+  mixed_precision: false
+  log_every: 25
+  val_every: 1
+  max_train_batches: null
+  max_val_batches: null
+  lr_scheduler:
+    name: reduce_on_plateau
+    factor: 0.5
+    patience: 2
+    min_lr: 2.0e-06
+  early_stopping:
+    enabled: true
+    patience: 4
+    min_delta: 0.0001
+  init_checkpoint: checkpoints/cnvqg_mamba_1m_opt_mel_020_ft/best.pt
+  ema:
+    enabled: false
+    decay: 0.999
+  metricgan_lite:
+    enabled: true
+    metric_weight: 0.005
+    quality_learning_rate: 0.0001
+    quality_weight_decay: 0.0001
+    quality_grad_clip_norm: 5.0
+    channels: 32
+    kernel_size: 15
+    dropout: 0.1
+paths:
+  checkpoint_dir: checkpoints
+  experiment_name: cnvqg_mamba_1m_opt_mel_020_metric_0005_ft

@@ -1,0 +1,49 @@
+version: v18_recipe8
+status: frozen_before_execution
+frozen_at: '2026-07-27'
+purpose: training_domain_two_stage_controller_test
+hypothesis: >-
+  Separating the full-enhancement routing decision from conditional
+  reduced-strength selection will lower avoidable preservation violations
+  and improve intermediate-strength learning without sacrificing utility.
+scope:
+  training_domain_calibration_only: true
+  voicebank_development_used: false
+  dns_cross_domain_development_used: false
+  voicebank_test_used: false
+  dns1_external_test_used: false
+architecture:
+  frozen_backbone: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  warm_start: checkpoints/v17/utility_safety_recipe7b_prefix_seed17048/epoch_006.pt
+  full_route: binary_full_versus_reduced
+  reduced_route: conditional_strengths_0_0_0_25_0_5_0_75
+  zero_residual_initialisation_preserves_recipe7b_policy: true
+  gate_parameter_cap: 10000
+retained_from_recipe7b:
+  - causal_statistics
+  - explicit_one_second_prefix_targets
+  - balanced_domain_class_sampler
+  - first_50_percent_loss_burn_in
+  - utility_violation_feasibility_metric_auxiliary_heads
+  - frozen_candidate_a_backbone
+training:
+  config: configs/v18/utility_safety_recipe8_two_stage_seed18000.yaml
+  seed: 18000
+  epochs: 8
+  expected_runtime_minutes: 4-7
+training_domain_entry_gates:
+  existing_nine_checks: unchanged
+  full_route_accuracy_minimum: 0.80
+  reduced_route_recall_minimum: 0.75
+  reduced_macro_accuracy_minimum: 0.30
+  avoidable_violation_rate_maximum: 0.20
+decision:
+  pass: advance_recipe8_to_independent_confirmation
+  fail: stop_recipe8_and_report_two_stage_limit
+after_pass:
+  permitted:
+    - independent_training_seed_confirmation
+  forbidden_until_confirmation_passes:
+    - voicebank_development_evaluation
+    - dns_cross_domain_development_evaluation
+    - any_test_evaluation

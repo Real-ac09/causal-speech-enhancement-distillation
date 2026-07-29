@@ -1,0 +1,30 @@
+version: v17_recipe5b
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe 5 changed the sampler as well as the target formulation. Restoring
+  Recipe 4's balanced domain/class sampler will determine whether the
+  full-strength collapse was caused primarily by raw policy imbalance.
+only_change_from_recipe5:
+  - uniform_window_sampling_to_recipe4_balanced_domain_class_sampling
+retained:
+  - recipe5_prepared_soft_policy_targets
+  - recipe5_utility_safety_metric_heads
+  - recipe5_loss_weights_and_clips
+  - recipe5_selector_equation
+  - twelve_clean_reference_free_causal_features
+  - hidden_dimension_16
+  - controller_parameter_count_3603
+  - frozen_candidate_a_backbone
+  - true_waveform_residual_blend
+  - eight_epochs
+  - unchanged_nine_check_selection_gate
+training:
+  config: configs/v17/utility_safety_recipe5b_balanced_seed17045.yaml
+  script: scripts/train_v17_recipe5b.py
+  seed: 17045
+  development_set_used: false
+  external_test_used: false
+decision:
+  pass: advance_recipe5b_to_frozen_development_benchmarks
+  fail: stop_recipe5b_and_build_causal_statistics_controller

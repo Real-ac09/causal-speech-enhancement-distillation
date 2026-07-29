@@ -1,0 +1,57 @@
+version: v17_recipe3
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe 2 established that local oracle targets are more learnable, but
+  independent five-way softmax supervision compressed predicted strengths and
+  ignored intermediate classes. Rank-consistent cumulative thresholds plus
+  direct strength and range supervision should preserve ordering and recover
+  the missing dynamic range.
+controlled_changes_from_recipe2:
+  retained:
+    - audited_recipe2_local_oracle_labels
+    - frozen_candidate_a_backbone
+    - true_waveform_residual_blend
+    - causal_gru_controller_hidden_dimension_16
+    - mixture_and_backbone_noise_features
+    - balanced_domain_and_class_sampler
+    - valid_speech_frame_mask
+    - eight_epochs
+    - unchanged_learnability_gate
+  changed:
+    - five_way_softmax_to_four_rank_consistent_cumulative_thresholds
+    - add_masked_expected_strength_smooth_l1
+    - add_pairwise_half_range_margin
+controller:
+  initial_cutpoints:
+    - -1.5
+    - -0.5
+    - 0.5
+    - 1.5
+  initial_expected_strength: 0.5
+  ordered_cutpoints_guaranteed: true
+loss:
+  cumulative_ordinal_weight: 1.0
+  strength_regression_weight: 1.0
+  strength_regression_beta: 0.1
+  separation_weight: 0.5
+  separation_scale: 0.5
+  separation_minimum_target_distance: 0.5
+  smoothness_weight: 0.001
+data:
+  train: results/v17/recipe2_local_oracles/train/metadata.csv
+  calibration: results/v17/recipe2_local_oracles/calibration/metadata.csv
+  train_windows: 3437
+  calibration_windows: 638
+  development_set_used: false
+  external_test_used: false
+learnability_gate:
+  dns_target_correlation_minimum: 0.30
+  macro_nearest_grid_accuracy_minimum: 0.35
+  dns_target_mae_maximum: 0.20
+  predicted_target_means_monotonic_tolerance: 0.02
+  target_one_minus_zero_mean_minimum: 0.30
+  voice_target_mae_maximum: 0.10
+decision:
+  pass: advance_selected_epoch_to_frozen_development_benchmarks
+  fail: stop_recipe3_and_expand_causal_controller_features

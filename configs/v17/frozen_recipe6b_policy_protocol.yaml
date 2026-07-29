@@ -1,0 +1,39 @@
+version: v17_recipe6b_policy
+status: frozen_before_heldout_policy_evaluation
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe 6 learned useful safety information but discrete posterior argmax is
+  slightly too aggressive under domain shift. A minimal training-derived
+  monotonic class penalty may recover the safety margin without retraining or
+  sacrificing the other quality gates.
+policy:
+  equation: argmax(log_p_class_minus_lambda_times_class_index)
+  lambda: 0.02
+  grid_screened_on_training_only:
+    minimum: 0.0
+    maximum: 0.5
+    step: 0.01
+selection_reason: >-
+  Smallest positive grid value that reduced training avoidable violations,
+  retained all nine gates, and improved macro accuracy.
+training_evidence:
+  items: 3437
+  baseline_avoidable_violation_rate: 0.1830386378519974
+  selected_avoidable_violation_rate: 0.1807465618860511
+  selected_checks_passed: 9
+  selected_macro_accuracy: 0.41983214680520237
+  selected_mean_utility: 3.3986114565821306
+  selected_mean_pesq_delta: 0.46595179387252694
+retained:
+  - recipe6_epoch_008_weights
+  - fixed_memory_native_streaming
+  - unchanged_candidate_strength_grid
+  - unchanged_nine_check_gate
+disclosure: >-
+  The held-out pool had already been used for Recipe-6 checkpoint selection
+  and baseline error analysis, but not to choose lambda or evaluate alternate
+  Recipe-6b policies. This remains a model-selection result, not final-test
+  evidence.
+decision:
+  pass: advance_recipe6b_to_frozen_development_benchmarks
+  fail: stop_recipe6b_and_build_prefix_aligned_supervision

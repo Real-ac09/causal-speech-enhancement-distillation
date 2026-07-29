@@ -9,10 +9,10 @@ data:
   batch_size: 4
   num_workers: 2
 model:
-  encoder_channels: 384
-  latent_dim: 768
-  speech_dim: 768
-  noise_dim: 384
+  encoder_channels: 336
+  latent_dim: 672
+  speech_dim: 672
+  noise_dim: 336
   codebook_size: 2048
   temporal_hidden_dim: 128
   temporal_layers: 12

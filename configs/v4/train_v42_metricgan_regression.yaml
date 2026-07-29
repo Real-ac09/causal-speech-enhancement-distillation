@@ -1,0 +1,97 @@
+project: {name: cn-vqg-speech-enhancement, seed: 42}
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/val.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 4
+model:
+  architecture: continuous_adaptive_tf_mamba_v42
+  variant: xl
+  sample_rate: 16000
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  center: true
+  magnitude_power: 0.3
+  mask_max: 2.0
+  max_iterations: 3
+  use_mamba: true
+  use_noise_codebook: false
+  condition_dynamics: true
+  adaptive_iterations: true
+  phase_confidence: true
+  noise_segment_frames: 32
+loss:
+  waveform_l1_weight: 0.5
+  si_sdr_weight: 0.15
+  stft_weight: 0.5
+  stft_fft_sizes: [256, 512, 1024]
+  stft_hop_sizes: [64, 128, 256]
+  stft_win_lengths: [256, 512, 1024]
+  vq_weight: 0.0
+  mel_weight: 0.25
+  complex_stft_weight: 0.1
+  noise_prediction_weight: 0.025
+  magnitude_weight: 1.0
+  phase_weight: 0.2
+  group_delay_weight: 0.05
+  instantaneous_frequency_weight: 0.05
+  phase_confidence_weight: 0.05
+  phase_confidence_temperature: 1.0
+  compute_weight: 0.001
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 128
+  tf_detail_win_length: 512
+  tf_detail_center: true
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 8
+  learning_rate: 0.00001
+  weight_decay: 0.00001
+  grad_clip_norm: 2.0
+  precision: bf16
+  log_every: 25
+  val_every: 1
+  checkpoint_metric: perceptual_enhanced_pesq
+  checkpoint_mode: max
+  init_checkpoint: checkpoints/continuous_adaptive_tf_mamba_v42_scratch_adaptive/best.pt
+  init_strict: true
+  optimizer:
+    name: muon
+    muon_learning_rate: 0.0005
+    adamw_learning_rate: 0.00001
+    momentum: 0.95
+    nesterov: true
+    ns_steps: 5
+    muon_weight_decay: 0.00001
+  lr_scheduler:
+    name: reduce_on_plateau
+    mode: max
+    metric: perceptual_enhanced_pesq
+    factor: 0.5
+    patience: 2
+    min_lr: 0.0000005
+  early_stopping: {enabled: true, patience: 4, min_delta: 0.002}
+  perceptual_validation: {enabled: true, max_items: 100}
+  ema: {enabled: false}
+  metricgan_lite:
+    enabled: true
+    target_type: pesq_regression
+    metric_weight: 0.01
+    quality_learning_rate: 0.00001
+    quality_weight_decay: 0.001
+    quality_grad_clip_norm: 1.0
+    quality_update_interval: 8
+    quality_start_epoch: 1
+    quality_stop_epoch: 3
+    generator_start_epoch: 2
+    target_floor: 0.02
+    target_ceiling: 0.98
+    channels: 16
+    kernel_size: 15
+    dropout: 0.3
+paths:
+  checkpoint_dir: checkpoints
+  experiment_name: continuous_adaptive_tf_mamba_v42_metricgan_regression

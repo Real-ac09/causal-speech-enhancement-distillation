@@ -1,0 +1,117 @@
+protocol_id: v15_causal_preservation_gate_seed1200_2026-07-26
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+purpose: >-
+  Test whether a tiny input-dependent causal residual gate can preserve
+  cross-domain intelligibility without the PESQ and SI-SDR regressions caused
+  by candidate B's global random identity-example intervention.
+hypothesis:
+  intervention: >-
+    Freeze candidate A epoch 3 and train only a causal frame-level gate that
+    blends between its enhanced spectrum and the noisy-input spectrum.
+  evidence: >-
+    Candidate B's benefit was strongly condition-dependent and its worst cases
+    exhibited intermittent bypass-like behaviour. A global loss or identity
+    probability is therefore insufficiently selective.
+  architecture_change: true
+  backbone_parameters: 808095
+  gate_parameters: 2897
+  deployed_parameters: 810992
+  parameter_budget: 850000
+  algorithmic_latency_ms: 20.0
+  native_streaming_required: true
+control:
+  frozen_backbone: checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt
+  backbone_candidate: v15_quiet_level_seed1200_epoch3
+  trainable_parameter_pattern: confidence_gate
+  clean_input_probability: 0.0
+  targeted_identity_regularizer:
+    weight: 0.02
+    snr_threshold_db: 15.0
+    temperature_db: 2.0
+  quiet_level_augmentation:
+    probability: 0.50
+    target_clean_rms_dbfs:
+      - -35.0
+      - -30.0
+      - -25.0
+      - -20.0
+selection_policy:
+  candidate_order: 4
+  candidate_budget: 4
+  fixed_training_epoch: 3
+  epoch_reselection_permitted: false
+  training_rng_seed: 15040
+  evaluate_only_epoch: 3
+  dns1_external_test_reuse_permitted: false
+  if_all_gates_pass: promote_to_three_seed_replication
+  if_any_gate_fails: stop_candidate_search_and_report
+training:
+  config: configs/v15/causal_preservation_gate_seed1200.yaml
+  config_sha256: e8eb5426524a99fde186acabc3f22a28fd18a52ddb77a6d7404808dcf99a3cc6
+  command: >-
+    PYTHONPATH=src:scripts python scripts/train_v15_gate.py
+    --config configs/v15/causal_preservation_gate_seed1200.yaml --device cuda
+  output_directory: checkpoints/v15/preservation/causal_preservation_gate_seed1200
+  expected_checkpoint: checkpoints/v15/preservation/causal_preservation_gate_seed1200/epoch_003.pt
+  epochs: 3
+  precision: bf16
+  learning_rate: 0.0005
+  batch_size: 8
+  frozen_backbone: true
+  trainable_parameters: 2897
+evaluation:
+  cross_domain_metadata: data/processed/dns_cross_domain_dev/metadata.csv
+  voicebank_metadata: data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv
+  promotion_gates: configs/v15/promotion_gates.yaml
+  cross_domain_reference: v14_2_seed1200_epoch3
+  voicebank_reference: v14_2_seed1200_epoch3
+  bootstrap_samples: 20000
+  bootstrap_seed: 15040
+  runtime:
+    one_cpu_thread: true
+    measured_audio_seconds: 10
+    native_constant_work_streamer: V14NativeStreamer
+    maximum_rtf: 0.50
+    maximum_frame_p95_ms: 10.0
+integration_validation:
+  gpu_smoke_batches: 2
+  gpu_smoke_passed: true
+  causal_and_streaming_tests_passed: 21
+  smoke_native_cpu_rtf: 0.3816023645
+  smoke_native_cpu_p95_ms: 3.9044184499999997
+  smoke_results_are_selection_eligible: false
+frozen_inputs:
+  configs/v15/causal_preservation_gate_seed1200.yaml: e8eb5426524a99fde186acabc3f22a28fd18a52ddb77a6d7404808dcf99a3cc6
+  checkpoints/v15/preservation/quiet_level_seed1200/epoch_003.pt: 5978d1ae47d7076c0ce857e1d4d0287e787753f81f69068247d9ed571443c3c8
+  data/processed/voicebank_demand/metadata/train.csv: 5cdc898cb997aab244c90cf1cd6229e40e5a193ff6a58f4a21bc88233450defc
+  data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv: 4bf6ecca9c570b89f3ae9b6f75255ca9c81c8eab26175536f172cd4bb248abc2
+  data/processed/dns_cross_domain_dev/metadata.csv: 5fa4e3613c86daa797176e13c9296ccf7e293bd920d0678db5a26679ebb772e9
+  data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv: 84223a4ca063f5794d43bcbfe3360b0f2fdb8b1f7d6721b040c90edea49c10af
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/summary.json: 03b67f1a393388020a7000ac6ebac080a2c9b6cbb7ed9a5b52c7fd98a281f49e
+  results/v15/cross_domain_dev/baselines_seed1200/v14_2/per_file_metrics.csv: 325797a4e0d9d4b0e7954c14e22747eed990ba9c3f8498ed755240b39dc4745c
+  results/v14/distillation/winner_dev400/summary.json: 8b91240ee22d2feaa0608aa9a06a93431c45b46cecd3934bb6206a338bd80281
+  results/v14/distillation/winner_dev400/per_file_metrics.csv: da8fae618a522441957b7b76f4c21781eaf3ea5d2c1c8cd5111024dcf6bdb664
+  configs/v15/promotion_gates.yaml: ddad0a8e9e92fca7c7029bc50c53d1567eaaf7602b7a873514b5548d29863488
+  results/v15/preservation/quiet_level_identity_seed1200/error_analysis_vs_quiet_level/summary.json: 081cf26bea08695a29358e6d87c0348be80be0c5c335529c607b926f92fe76d7
+  docs/results/v15_identity_error_analysis.md: 78b2bb95cf76988f2d29e885144d71993618412a1e9bd357a621651b8e767119
+source_files:
+  scripts/train_v15_gate.py: 7a203fc356068da883e10dcd19d751fa87902f9c9dfde99136938d5affc349ab
+  scripts/train.py: 99ded7aa0acb2ea663c2d6581c4eaa1f4e3a249ad81cdd183539894261843a67
+  scripts/train_distill_v15.py: 6659a462e606abbedc143041b94ed85ec54587ca005f615060ae9d38923ef9e1
+  src/cnvqg/data/dataset.py: 6bec3ad129e23e3ccb8e71379c0d07e511b986d5eff493ce846cc9a7376e60d6
+  src/cnvqg/losses/losses.py: a3e98be6e3aa980f8405de8ac6a682afd7c253ca64bd659f5a12231ad0ff2a3c
+  src/cnvqg/models/causal_confidence_gate_v14.py: 9d5866f2330431282596d778a810296d8c7e0d8de6ec9073a3ee19a7e4c055cb
+  src/cnvqg/models/v14_native_streaming.py: cd95fb5a78b5808ac2fbacc6bb997d542698fbbd77bff92961ac6dc58e5ba9e0
+  src/cnvqg/models/v8_native_streaming.py: 5a27698ce02b7076632d5bd59422c72db358d426fe4c71f21db745c91026d139
+  src/cnvqg/models/factory.py: 3ae66ab4a64b69a932b41cdd32ad56573fd1364d49bfe8a9f4d175052d3473a8
+  src/cnvqg/models/__init__.py: 744cf1b6fe9179333bff438969c331cee1a90f0cc63190a0136bc4b054be2c0a
+  src/cnvqg/optimizers.py: e2db2f135bc26029bfac4debf9b00b7b9d79e5b72b52f3440d9f09b4476bbfe9
+  scripts/measure_latency.py: 2a04aaaecfe8f38dc1aa2b6bd45611da64968d4d479a6af855956fbbdd82c8f6
+  scripts/evaluate.py: b26163d2f0cc1e3963bff2f45c67af4f7fd7afd05bf85649d35b5b3d5bf26cc3
+  scripts/compare_evaluations.py: 23342cb09f0b56fac932347b373d25ea9c02234d8abe17797b85892ef5d587b2
+  scripts/gate_v15_quiet_level.py: 2eb25952c5cd66ce8674034474a5516042f0fca7a337d29cd03076ba624c1c21
+  scripts/gate_v15_candidate_d.py: b3e1b01075a13e3dd9ac780474ee0f9a30fac62b011d5857d1c1c2d0d58ddf26
+  scripts/run_v15_candidate_d_evaluation.py: 2236bc004bd868a9f70180ee4f4a038558e9bfd02c52b75e33a82ba3352be789
+  scripts/run_v15_candidate_d.py: b7c9553d203d012535fc1749fbf1f718d763cef70214e7b968f7506bf55e2a44
+  tests/test_v14_native_streaming.py: 047cf5f0f11dad1198d9171e3d2a933ed1ccb585a8863099c2dbb13844eeac8a

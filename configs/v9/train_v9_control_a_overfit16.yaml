@@ -1,0 +1,72 @@
+project: {name: cn-vqg-speech-enhancement, seed: 9001}
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/v82_overfit_16.csv
+  val_metadata: data/processed/voicebank_demand/metadata/v82_overfit_16.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 4
+model:
+  architecture: causal_prototype_dual_axis_mamba_v9
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  mask_residual_limit: 1.0
+  use_mamba: true
+  use_frequency_mamba: false
+  use_noise_conditioning: false
+  use_auxiliary_vq: false
+  use_phase_detail: false
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+loss:
+  waveform_l1_weight: 0.1
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.1
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 1.0
+  complex_stft_fft_sizes: [512]
+  complex_stft_hop_sizes: [160]
+  complex_stft_win_lengths: [320]
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  magnitude_weight: 0.5
+  magnitude_equal_loudness: true
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 100
+  learning_rate: 0.0003
+  weight_decay: 0.00001
+  grad_clip_norm: 5.0
+  precision: bf16
+  log_every: 1
+  val_every: 5
+  checkpoint_metric: loss_total
+  checkpoint_mode: min
+  optimizer: {name: adamw}
+  lr_scheduler:
+    name: warmup_cosine
+    warmup_epochs: 5
+    minimum_factor: 0.05
+  early_stopping: {enabled: false}
+  perceptual_validation: {enabled: true, max_items: 16}
+  ema: {enabled: false}
+  metricgan_lite: {enabled: false}
+paths:
+  checkpoint_dir: checkpoints/v9
+  experiment_name: control_a_overfit16_v3

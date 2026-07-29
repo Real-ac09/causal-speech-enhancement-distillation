@@ -42,6 +42,8 @@ class PairedSpeechDataset(Dataset):
         chunk_seconds: Optional[float] = 4.0,
         random_crop: bool = True,
         peak_normalize: bool = False,
+        pcs_target: bool = False,
+        clean_input_probability: float = 0.0,
     ) -> None:
         self.metadata_csv = Path(metadata_csv)
         self.project_root = Path(project_root)
@@ -49,6 +51,10 @@ class PairedSpeechDataset(Dataset):
         self.chunk_seconds = chunk_seconds
         self.random_crop = random_crop
         self.peak_normalize = peak_normalize
+        self.pcs_target = bool(pcs_target)
+        self.clean_input_probability = float(clean_input_probability)
+        if not 0.0 <= self.clean_input_probability <= 1.0:
+            raise ValueError("clean_input_probability must be in [0, 1]")
 
         if not self.metadata_csv.exists():
             raise FileNotFoundError(f"Metadata CSV not found: {self.metadata_csv}")
@@ -92,11 +98,22 @@ class PairedSpeechDataset(Dataset):
 
         noisy, clean = self._align_lengths(noisy, clean)
 
+        if self.pcs_target:
+            clean = self._perceptual_contrast_stretch(clean)
+
         if self.peak_normalize:
             noisy, clean = self._peak_normalize_pair(noisy, clean)
 
         if self.chunk_samples is not None:
             noisy, clean = self._crop_or_pad_pair(noisy, clean, self.chunk_samples)
+
+        # Optional identity examples teach conservative enhancement modules to
+        # leave already-clean speech untouched. The clean target is unchanged.
+        if (
+            self.clean_input_probability > 0.0
+            and random.random() < self.clean_input_probability
+        ):
+            noisy = clean.clone()
 
         return {
             "noisy": noisy,
@@ -105,6 +122,33 @@ class PairedSpeechDataset(Dataset):
             "speaker_id": str(row["speaker_id"]) if "speaker_id" in row else "unknown",
             "sample_rate": self.sample_rate,
         }
+
+    @staticmethod
+    def _perceptual_contrast_stretch(waveform: torch.Tensor) -> torch.Tensor:
+        """PCS400 target from Chao et al., kept opt-in and training-only."""
+        weights = waveform.new_ones(201)
+        weights[3:5] = 1.070175439
+        weights[5:8] = 1.182456140
+        weights[8:10] = 1.287719298
+        weights[10:110] = 1.4
+        weights[110:130] = 1.322807018
+        weights[130:160] = 1.238596491
+        weights[160:190] = 1.161403509
+        weights[190:201] = 1.077192982
+        window = torch.hamming_window(400, periodic=True, dtype=waveform.dtype)
+        spectrum = torch.stft(
+            waveform.squeeze(0), n_fft=400, hop_length=100, win_length=400,
+            window=window, center=True, return_complex=True,
+        )
+        magnitude = torch.expm1(torch.log1p(spectrum.abs()) * weights[:, None])
+        transformed = torch.istft(
+            torch.polar(magnitude, torch.angle(spectrum)), n_fft=400, hop_length=100,
+            win_length=400, window=window, center=True, length=waveform.shape[-1],
+        ).unsqueeze(0)
+        # Preserve the clean target's peak scale instead of the original PCS
+        # post-processing convention of always normalizing to full scale.
+        target_peak = waveform.abs().amax().clamp_min(1e-7)
+        return transformed * (target_peak / transformed.abs().amax().clamp_min(1e-7))
 
     def _resolve_path(self, path_value: str) -> Path:
         path = Path(path_value)
@@ -204,4 +248,3 @@ def speech_enhancement_collate_fn(batch):
         "speaker_id": speaker_ids,
         "sample_rate": sample_rates,
     }
-

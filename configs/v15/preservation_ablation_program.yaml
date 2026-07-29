@@ -1,0 +1,87 @@
+programme_id: v15_training_only_preservation_ablations_2026-07-25
+status: prepared_not_started
+prepared_at: '2026-07-25'
+base_recipe:
+  source_checkpoint: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+  teacher_checkpoint: checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt
+  architecture: causal_temporal_core_v12
+  parameter_count: 808095
+  initialization_seed: 1200
+  distillation_rng_seed: 1420
+  fixed_epoch: 3
+  learning_rate: 0.000025
+  privileged_log_magnitude_weight: 0.05
+  privileged_confidence_floor: 0.05
+  source_recipe: v14_2
+development_sets:
+  voicebank: data/processed/voicebank_demand/metadata/v12_architecture_selection_400.csv
+  cross_domain: data/processed/dns_cross_domain_dev/metadata.csv
+promotion_gates: configs/v15/promotion_gates.yaml
+candidate_budget: 4
+sequence:
+  - id: a_quiet_level
+    priority: 1
+    architecture_change: false
+    changes:
+      level_augmentation_probability: 0.50
+      target_clean_rms_dbfs:
+        - -35.0
+        - -30.0
+        - -25.0
+        - -20.0
+      clean_input_probability: 0.0
+      magnitude_ratio_underestimation_weight: 1.0
+    hypothesis: >-
+      Remove the absolute-level distribution shift responsible for the
+      strongest observed DNS1 STOI failure without changing the objective or
+      deployed graph.
+  - id: b_quiet_level_identity
+    priority: 2
+    architecture_change: false
+    changes:
+      level_augmentation_probability: 0.50
+      target_clean_rms_dbfs:
+        - -35.0
+        - -30.0
+        - -25.0
+        - -20.0
+      clean_input_probability: 0.10
+      magnitude_ratio_underestimation_weight: 1.0
+    hypothesis: >-
+      Add conservative identity examples to A so already-clean speech and
+      speech-dominant frames are not needlessly attenuated.
+  - id: c_quiet_identity_mild_under
+    priority: 3
+    architecture_change: false
+    conditional_on: >-
+      Run only if B improves cross-domain STOI but remains below its primary
+      promotion gate.
+    changes:
+      level_augmentation_probability: 0.50
+      target_clean_rms_dbfs:
+        - -35.0
+        - -30.0
+        - -25.0
+        - -20.0
+      clean_input_probability: 0.10
+      magnitude_ratio_underestimation_weight: 1.10
+    hypothesis: >-
+      Mildly penalise speech-bin attenuation. The weight is deliberately below
+      the previously rejected 1.5 and 2.0 settings that improved STOI at an
+      unacceptable PESQ and SI-SDR cost.
+  - id: d_causal_preservation_gate
+    priority: 4
+    architecture_change: true
+    conditional_on: >-
+      Prepare only if every training-only candidate fails and the best candidate
+      shows a clear condition-dependent residual-control opportunity.
+    parameter_budget: 10000
+    hypothesis: >-
+      Use a tiny causal gate to reduce enhancement strength only in conditions
+      where the fixed backbone predicts harmful suppression.
+execution_policy:
+  start_training_automatically: false
+  evaluate_each_candidate_on_both_development_sets: true
+  stop_after_first_candidate_passing_every_gate: true
+  run_three_seed_replication_only_after_seed1200_passes: true
+  dns1_external_test_reuse_forbidden: true

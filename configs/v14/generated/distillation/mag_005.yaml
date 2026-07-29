@@ -1,0 +1,102 @@
+teacher_checkpoint: checkpoints/auxiliary_gated_tf_mamba_v43_scratch_adaptive/best.pt
+project:
+  name: cn-vqg-speech-enhancement
+  seed: 1420
+data:
+  train_metadata: data/processed/voicebank_demand/metadata/train.csv
+  val_metadata: data/processed/voicebank_demand/metadata/v12_epoch_selection_100.csv
+  sample_rate: 16000
+  chunk_seconds: 4.0
+  batch_size: 4
+  num_workers: 6
+student_model:
+  architecture: causal_temporal_core_v12
+  variant: student
+  sample_rate: 16000
+  n_fft: 512
+  win_length: 320
+  hop_length: 160
+  magnitude_power: 0.3
+  auxiliary_vq: false
+  codebook_size: 32
+  prediction_horizons:
+  - 1
+  - 2
+  - 4
+  vq_commitment_weight: 0.02
+  vq_usage_weight: 0.005
+  prototype_prediction_weight: 0.02
+  use_mamba: false
+  mamba_d_state: 16
+  mamba_d_conv: 4
+  mamba_expand: 2
+  phase_residual_scale: 0.0
+  reconstruction_mode: direct_scalar_mask
+  scale_preserving_detail: false
+  temporal_core: gru
+  temporal_hidden_dim: 232
+  time_kernel_size: 1
+distillation:
+  type: privileged_causal
+  waveform_weight: 0.0
+  compressed_complex_weight: 0.0
+  log_magnitude_weight: 0.05
+  n_fft: 512
+  hop_length: 160
+  win_length: 320
+  compression_power: 0.3
+  confidence_temperature: 0.05
+  confidence_floor: 0.05
+loss:
+  waveform_l1_weight: 0.05
+  waveform_charbonnier_eps: 0.001
+  si_sdr_weight: 0.01
+  stft_weight: 0.0
+  vq_weight: 0.0
+  mel_weight: 0.0
+  complex_stft_weight: 0.5
+  complex_stft_fft_sizes:
+  - 512
+  complex_stft_hop_sizes:
+  - 160
+  complex_stft_win_lengths:
+  - 320
+  complex_stft_complex_weight: 1.0
+  complex_stft_log_mag_weight: 0.0
+  complex_stft_compression_power: 0.3
+  noise_prediction_weight: 0.0
+  noise_spectrum_weight: 0.0
+  magnitude_weight: 0.0
+  magnitude_log_weight: 0.25
+  magnitude_ratio_weight: 1.0
+  magnitude_ratio_cap: 1.0
+  magnitude_ratio_loss: l1
+  magnitude_ratio_charbonnier_eps: 0.001
+  magnitude_equal_loudness: false
+  phase_weight: 0.0
+  group_delay_weight: 0.0
+  instantaneous_frequency_weight: 0.0
+  phase_confidence_weight: 0.0
+  compute_weight: 0.0
+  tf_detail_n_fft: 512
+  tf_detail_hop_length: 160
+  tf_detail_win_length: 320
+  tf_detail_center: false
+  tf_detail_magnitude_power: 0.3
+training:
+  epochs: 4
+  learning_rate: 2.5e-05
+  weight_decay: 1.0e-05
+  grad_clip_norm: 2.0
+  precision: bf16
+  distillation_warmup_epochs: 2
+  checkpoint_metric: supervised
+  save_every_epoch: true
+  init_checkpoint: checkpoints/v12/full/gru_matched_time1_seed1200/best.pt
+  optimizer:
+    name: adamw
+  early_stopping:
+    enabled: false
+paths:
+  checkpoint_dir: checkpoints/v14/distillation
+  experiment_name: mag_005

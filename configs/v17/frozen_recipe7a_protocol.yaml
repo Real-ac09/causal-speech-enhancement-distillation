@@ -1,0 +1,32 @@
+version: v17_recipe7a
+status: frozen_before_execution
+frozen_at: '2026-07-26'
+hypothesis: >-
+  Recipe-6 full-window targets are unknowable from early causal prefixes.
+  Applying those privileged targets only after a 50-percent burn-in should
+  improve late evidence use while preserving the warm-started early policy.
+only_training_change_from_recipe6:
+  - mask_first_50_percent_of_valid_frames_from_all_recipe5_target_losses
+unchanged:
+  - recipe6_causal_statistics_architecture
+  - recipe6_epoch8_warm_start
+  - recipe4_balanced_domain_class_sampling
+  - recipe5_target_values_and_loss_weights
+  - frozen_candidate_a_backbone
+  - controller_parameter_count_9699
+  - unchanged_nine_check_selection_gate
+training:
+  config: configs/v17/utility_safety_recipe7a_burnin_seed17047.yaml
+  script: scripts/train_v17_recipe7a.py
+  seed: 17047
+  epochs: 8
+  learning_rate: 0.0001
+  development_set_used: false
+  external_test_used: false
+claim_scope: >-
+  Recipe 7a is an inexpensive diagnostic of target-timing mismatch. Passing
+  supports burn-in-aware training; failure triggers explicit prefix-oracle
+  generation and does not rule out prefix-aligned supervision.
+decision:
+  pass: advance_recipe7a_to_frozen_development_benchmarks
+  fail: stop_recipe7a_and_generate_explicit_prefix_oracles
