@@ -1,4 +1,4 @@
-# Model-version and Codex handover
+# Model-version
 
 > Status: project handover for report writing. Model development was frozen on
 > 27 July 2026. The authoritative final decision is
@@ -523,7 +523,7 @@ On one AMD Ryzen 7 7800X3D CPU thread:
 - streaming real-time factor 0.372;
 - persistent FP32 state 0.119 MiB.
 
-## 7. Files the next Codex should trust
+## 7. Files to review 
 
 Read these first:
 
@@ -575,44 +575,3 @@ artifacts if anything has changed.
   canonical deployment checkpoint is seed 1200, epoch 3, while final quality
   claims aggregate all three seeds.
 
-## 9. Recommended next task
-
-The next task is report writing, beginning with the Discussion chapter. It
-should explain:
-
-1. why GRU-T1 was selected by quality-efficiency non-inferiority;
-2. why privileged distillation improved perceptual metrics without changing
-   deployment;
-3. why SI-SDR remained neutral while PESQ/STOI/ESTOI improved;
-4. why external DNS1 supports limited generalisation but not universal
-   intelligibility preservation;
-5. why VQ, Mamba, attention, explicit scale correction, phase correction, and
-   learned preservation controllers were excluded;
-6. what the V15–V18 negative results reveal about causal risk prediction.
-
-Do not launch more training unless report writing reveals a critical missing
-verification that cannot be resolved from the frozen artifacts.
-
-## 10. Copyable prompt for another Codex session
-
-```text
-You are continuing a frozen master's dissertation project on causal real-time
-speech enhancement. Work only from repository evidence. First read:
-
-1. docs/thesis/model_version_and_codex_handover.md
-2. docs/results/final_research_freeze.md
-3. docs/thesis/methods_and_experimental_setup_draft.md
-4. docs/thesis/results_chapter_draft.md
-
-V14.2 (CN-VQG-GRU-T1-PD) is the final model. Do not train or reselect models.
-The final student has 808,095 parameters, 20 ms algorithmic latency, a causal
-STFT/local-convolution/four-frame-noise-state/GRU/scalar-mask architecture,
-and no active Mamba or VQ. V14.2 differs from V13 only through training-time
-privileged distillation. VoiceBank-DEMAND is a historically reused standard
-comparability test; DNS1 is the independent external test. V15–V18 are
-unpromoted preservation ablations.
-
-The immediate task is dissertation writing in Coventry University APA 7th
-edition style. Preserve frozen numerical claims, distinguish development from
-test evidence, use primary citations, and do not invent missing results.
-```
