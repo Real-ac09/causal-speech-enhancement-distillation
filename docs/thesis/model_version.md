@@ -1,6 +1,6 @@
 # Model-version
 
-> Status: project handover for report writing. Model development was frozen on
+> Status: Model development was frozen on
 > 27 July 2026. The authoritative final decision is
 > [`final_research_freeze.md`](../results/final_research_freeze.md), not older
 > files whose titles contain the word “final”.
