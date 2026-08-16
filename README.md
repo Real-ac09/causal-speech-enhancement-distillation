@@ -238,9 +238,9 @@ checkpoints/             Local model weights (ignored by Git)
 Start with these authoritative records:
 
 1. [Final research freeze](docs/results/final_research_freeze.md)
-3. [Results chapter](docs/thesis/results_chapter_draft.md)
-4. [Model-version and architecture handover](docs/thesis/model_version.md)
-5. [Figure provenance and evidence policy](docs/figures/thesis/README.md)
+2. [Results chapter](docs/thesis/results_chapter_draft.md)
+3. [Model-version and architecture handover](docs/thesis/model_version.md)
+4. [Figure provenance and evidence policy](docs/figures/thesis/README.md)
 
 Older files whose names contain “final” may describe superseded historical
 stages. The 27 July 2026 research freeze is the authoritative project outcome.
