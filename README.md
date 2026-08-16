@@ -126,7 +126,7 @@ Despite the historical repository name and implementation filename, the final
 inference path uses **no vector quantiser and no Mamba block**. It also uses no
 attention, phase correction, residual preservation gate, or privileged teacher
 at inference. See the
-[model-version and architecture handover](docs/thesis/model_version_and_codex_handover.md)
+[model-version and architecture handover](docs/thesis/model_version.md)
 for the mapping between research labels, checkpoint aliases, and source files.
 
 ## What the later controller study found
@@ -238,7 +238,6 @@ checkpoints/             Local model weights (ignored by Git)
 Start with these authoritative records:
 
 1. [Final research freeze](docs/results/final_research_freeze.md)
-2. [Methods and experimental setup](docs/thesis/methods_and_experimental_setup_draft.md)
 3. [Results chapter](docs/thesis/results_chapter_draft.md)
 4. [Model-version and architecture handover](docs/thesis/model_version_and_codex_handover.md)
 5. [Figure provenance and evidence policy](docs/figures/thesis/README.md)
